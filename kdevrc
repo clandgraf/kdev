@@ -1,0 +1,7 @@
+#!/bin/sh
+
+CROSS_PREFIX=$HOME/opt/cross
+PATH="$CROSS_PREFIX/bin:$PATH"
+
+echo "Prefix: ${CROSS_PREFIX}"
+echo "Path:   ${PATH}"
