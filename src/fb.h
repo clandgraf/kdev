@@ -9,10 +9,10 @@
 #ifndef __FB_H__
 #define __FB_H__
 
+#include <stdint.h>
 
-/* Color Attributes for VGA mode */
 
-typedef enum fb_color {
+typedef enum fb_color {       /* Color Attributes for VGA mode */
   COLOR_BLACK         = 0x0,
   COLOR_BLUE          = 0x1,
   COLOR_GREEN         = 0x2,
@@ -33,8 +33,11 @@ typedef enum fb_color {
 } fb_color_t;
 
 
+typedef uint8_t  fb_attrib_t; /* Attribute type. Combines Foreground and Background Color */
+typedef uint16_t fb_cell_t;   /* Cell type. Combines Attribute and Character */
+
 void fb_clear();
 void fb_init();
-
+void fb_writestr(const char *);
 
 #endif
