@@ -4,11 +4,15 @@
 	cp $< $@
 
 HEADERS=$(addprefix ../img/usr/, $(shell find include/ -name *.h))
-#LIBS=../img/usr/lib/libk.a
 
-all: install-libs
+.PHONY:	all install-libs install-headers clean
 
-#install-libs:	install-headers $(LIBS)
-#	cd src && $(MAKE)
+all: install-headers install-libs
 
+install-libs:
+	cd src && $(MAKE)
 install-headers:	$(HEADERS)
+
+clean:
+	cd src && $(MAKE) clean
+	rm -f $(HEADERS)

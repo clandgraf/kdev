@@ -4,8 +4,8 @@
 ARCH=i386
 AS=i686-elf-as
 CC=i686-elf-gcc
-CFLAGS=-std=gnu99 -ffreestanding -O2 -Wall -Wextra
-LDFLAGS=-ffreestanding -O2 -nostdlib
+CFLAGS=-std=gnu99 --sysroot ../../img -isystem=../../img/usr/include/ -ffreestanding -O2 -Wall -Wextra
+LDFLAGS=-ffreestanding -O2 
 
 ../obj/%.o: %.c
 	mkdir -p $(dir $@)
@@ -14,13 +14,13 @@ LDFLAGS=-ffreestanding -O2 -nostdlib
 	mkdir -p $(dir $@)
 	$(AS) $< -o $@
 
-OBJECTS=$(addprefix ../obj/, fb.o kmain.o util.o arch/$(ARCH)/boot.o)
+OBJECTS=$(addprefix ../obj/, fb.o kmain.o arch/$(ARCH)/boot.o)
 BINARY=../../img/boot/kdev.bin
 
 all:	$(BINARY)
 
 $(BINARY):	$(OBJECTS)
-	$(CC) -T arch/i386/linker.ld -o $@ $(LDFLAGS) $(OBJECTS) -lgcc
+	$(CC) -T arch/i386/linker.ld -o $@ $(CFLAGS) $(OBJECTS) -nostdlib -lk -lgcc --verbose
 
 clean:
 	rm -rf ../obj 
