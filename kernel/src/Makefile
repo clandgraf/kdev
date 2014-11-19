@@ -20,7 +20,7 @@ BINARY=../../img/boot/kdev.bin
 all:	$(BINARY)
 
 $(BINARY):	$(OBJECTS)
-	$(CC) -T arch/i386/linker.ld -o $@ $(CFLAGS) $(OBJECTS) -nostdlib -lk -lgcc --verbose
+	$(CC) -T arch/i386/linker.ld -o $@ $(CFLAGS) $(OBJECTS) -nostdlib -lk -lgcc
 
 clean:
 	rm -rf ../obj 

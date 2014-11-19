@@ -7,5 +7,5 @@ extern "C"
 void kmain()
 {
   fb_init();
-  fb_writestr("Hello, World.\n");
+  fb_writestr("Hello, World.\nNewline");
 }

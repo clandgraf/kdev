@@ -2,12 +2,16 @@
 SUFFIXES=
 SUFFIXES=.iso
 
-all:	kdev.iso
+.PHONY:	all run kernel libs clean
 
-run:	kdev.iso
-	qemu-system-i386 -cdrom $<
+all:	disc-image
 
-kdev.iso:	kernel
+run:	disc-image
+	qemu-system-i386 -cdrom kdev.iso
+
+disc-image: kernel kdev.iso
+
+kdev.iso:
 	grub-mkrescue -o $@ img
 
 kernel:	libs
@@ -19,3 +23,4 @@ libs:
 clean:
 	cd kernel/src && $(MAKE) clean
 	cd libc && $(MAKE) clean
+	rm kdev.iso

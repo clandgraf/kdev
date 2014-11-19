@@ -54,7 +54,7 @@ void fb_clear()
 void fb_init()
 {
   fb_attrib = fb_make_attrib(COLOR_LIGHT_GREY, COLOR_BLACK);
-  fb_buffer = (uint16_t *) 0xB8000;    // TODO this might be different for monochrome screens
+  fb_buffer = (uint16_t *) 0xB8000;    // TODO this is different for monochrome screens
   fb_clear();
 }
 
@@ -70,20 +70,26 @@ void fb_setcellat(char c, fb_attrib_t attrib, int x, int y)
   fb_buffer[FB_INDEX(x, y)] = fb_make_cell(c, attrib);
 }
 
+void fb_newline()
+{
+  fb_row = 0;
+  if (++fb_column == FB_HEIGHT)
+    fb_column = 0;
+}
 
 void fb_putchar(char c)
 {
   fb_setcellat(c, fb_attrib, fb_row, fb_column);
-
-  if (++fb_row == FB_WIDTH) {
-    fb_row = 0;
-    if (++fb_column == FB_HEIGHT)
-      fb_column = 0;
-  }
+  if (++fb_row == FB_WIDTH)
+    fb_newline();
 }
 
 void fb_writestr(const char * str)
 {
-  while (*str)
-    fb_putchar(*str++);
+  for (;*str;str++) {
+    if (*str == '\n')
+      fb_newline();
+    else
+      fb_putchar(*str);
+  }
 }
