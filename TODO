@@ -1,0 +1,9 @@
+Kernel:
+
+- fb_putchar suppports no newlines.
+- implement i/o ports
+- set cursor in text_mode
+
+Project Structure:
+
+- have kernel includes in separate include directory, include these always from isystem.

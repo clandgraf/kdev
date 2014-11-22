@@ -1,26 +1,37 @@
+#
+# File:    Makefile
+# Author:  Christoph Landgraf
+# Purpose: Top level makefile. Use target run to start a vm booting the os
+#
+
+include config.mk
 
 SUFFIXES=
-SUFFIXES=.iso
+SUFFIXES=.iso .bin
 
-.PHONY:	all run kernel libs clean
+.PHONY:	all run disc-image kernel libs clean install-headers
 
-all:	disc-image
+all:	kdev.iso
 
-run:	disc-image
+run:	kdev.iso
 	qemu-system-i386 -cdrom kdev.iso
 
-disc-image: kernel kdev.iso
-
-kdev.iso:
+kdev.iso:	img/boot/kdev.bin
 	grub-mkrescue -o $@ img
 
-kernel:	libs
+img/boot/kdev.bin:	install-headers libs
 	cd kernel/src && $(MAKE)
 
+install-headers:
+	cd libc && $(MAKE) install-headers
+	cd kernel && $(MAKE) install-headers
+
 libs:	
-	cd libc/ && $(MAKE)
+	cd libc && $(MAKE)
 
 clean:
-	cd kernel/src && $(MAKE) clean
+	cd kernel && $(MAKE) clean
 	cd libc && $(MAKE) clean
-	rm kdev.iso
+	rm -rf img/usr
+	rm -f kdev.iso
+	find . -name "*~" -exec rm {} \;

@@ -1,36 +1,45 @@
+#
+# File:    libc/src/Makefile
+# Author:  Christoph Landgraf
+# Purpose: Compiles the libc and libk and installs these to the img
+#
 
-AR=i686-elf-ar
-CC=i686-elf-gcc
+include ../../config.mk
+
 CFLAGS=-isystem ../../img/usr/include -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
-../obj/usr/%.o:	%.c
+## Output Variables
+
+LIB_PREFIX=../../img/usr/lib
+LIBK=$(LIB_PREFIX)/libk.a
+LIBC=$(LIB_PREFIX)/libc.a
+LIBS=$(LIBK) $(LIBC)
+
+SRC=$(shell find . -name '*.c' -printf '%P\n')
+OBJS=$(SRC:.c=.o)
+LIBC_OBJS=$(addprefix ../obj/libc/, $(OBJS))
+LIBK_OBJS=$(addprefix ../obj/libk/, $(OBJS))
+
+## Template Rules
+
+../obj/libc/%.o:	%.c
 	mkdir -p $(dir $@)
 	$(CC) -c $< -o $@ $(CFLAGS)
-
-../obj/kern/%.o:	%.c
+../obj/libk/%.o:	%.c
 	mkdir -p $(dir $@)
-	$(CC) -c $< -o $@ $(CFLAGS) -D__ISKERNEL
+	$(CC) -c $< -o $@ $(CFLAGS) -D__IS_KERNEL
+$(LIB_PREFIX)/%.a:
+	mkdir -p $(dir $@)
+	$(AR) rcs $@ $^
 
-LIBK=../../img/usr/lib/libk.a
-LIBC=../../img/usr/lib/libc.a
-LIBS=$(LIBK) $(LIBA)
-
-OBJS=string/strlen.o
-
-LIBC_OBJS=$(addprefix ../obj/usr/, $(OBJS))
-LIBK_OBJS=$(addprefix ../obj/kern/, $(OBJS))
+## Targets
 
 .PHONY:	all clean
 
-all:	$(LIBK) $(LIBC)
+all:	$(LIBS)
 
 $(LIBK):	$(LIBK_OBJS)
-	mkdir -p $(dir $@)
-	$(AR) rcs $@ $(OBJS)
-
 $(LIBC):	$(LIBC_OBJS)
-	mkdir -p $(dir $@)
-	$(AR) rcs $@ $(OBJS)
 
 clean:
-	rm -rf ../obj $(LIBK) $(LIBC) ./*~
+	rm -rf ../obj $(LIBS)
