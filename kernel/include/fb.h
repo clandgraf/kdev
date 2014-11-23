@@ -39,10 +39,8 @@ typedef enum fb_color {       /* Color Attributes for VGA mode */
 typedef uint8_t  fb_attrib_t; /* Attribute type. Combines Foreground and Background Color */
 typedef uint16_t fb_cell_t;   /* Cell type. Combines Attribute and Character */
 
-
-void fb_clear();
 void fb_init();
+void fb_clear();
 void fb_putchar(char c);
-void fb_newline();
 
 #endif

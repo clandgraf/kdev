@@ -17,6 +17,8 @@ run:	kdev.iso
 	qemu-system-i386 -cdrom kdev.iso
 
 kdev.iso:	img/boot/kdev.bin
+	mkdir -p img/boot/grub
+	cp grub.cfg img/boot/grub
 	grub-mkrescue -o $@ img
 
 img/boot/kdev.bin:	install-headers libs

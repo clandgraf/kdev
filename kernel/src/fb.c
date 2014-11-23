@@ -9,6 +9,13 @@
 #include <stdint.h>
 
 #include <kernel/fb.h>
+#include <kernel/arch/i386/io.h>
+
+static const size_t VGA_CRTC_CTRL = 0x3d4;
+static const size_t VGA_CRTC_DATA = 0x3d5;
+
+static const size_t VGA_CURSOR_HI = 0x0e;
+static const size_t VGA_CURSOR_LO = 0x0f;
 
 static const size_t FB_WIDTH  = 80;
 static const size_t FB_HEIGHT = 25;
@@ -38,6 +45,18 @@ fb_cell_t fb_make_cell(char c, fb_attrib_t color)
 }
 
 
+void fb_setcursor(int row, int col)
+{
+    uint16_t idx = FB_INDEX(col, row);
+    
+    outb(VGA_CRTC_CTRL, VGA_CURSOR_LO); // Select low port
+    outb(VGA_CRTC_DATA, (uint8_t) idx & 0xff);
+
+    outb(VGA_CRTC_CTRL, VGA_CURSOR_HI); // Select hi port
+    outb(VGA_CRTC_DATA, (uint8_t) (idx >> 8) & 0xff);
+}
+
+
 void fb_clear()
 {
     for (size_t y = 0; y < FB_HEIGHT; y++)
@@ -47,6 +66,8 @@ void fb_clear()
 
     fb_row = 0;
     fb_column = 0;
+
+    fb_setcursor(fb_row, fb_column);
 }
 
 
@@ -73,9 +94,9 @@ void fb_setcellat(char c, fb_attrib_t attrib, int x, int y)
 
 void fb_newline()
 {
-    fb_row = 0;
-    if (++fb_column == FB_HEIGHT)
-	fb_column = 0;
+    fb_column = 0;
+    if (++fb_row == FB_HEIGHT)
+	fb_row = 0;
 }
 
 
@@ -84,8 +105,12 @@ void fb_putchar(char c)
     if (c == '\n')
 	fb_newline();
     else {
-	fb_setcellat(c, fb_attrib, fb_row, fb_column);
-	if (++fb_row == FB_WIDTH)
+	fb_setcellat(c, fb_attrib, fb_column, fb_row);
+	fb_setcursor(fb_row, fb_column);
+
+	if (++fb_column == FB_WIDTH)
 	    fb_newline();
     }
+
+    fb_setcursor(fb_row, fb_column);
 }

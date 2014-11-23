@@ -19,16 +19,16 @@ LDFLAGS=-ffreestanding -O2
 	mkdir -p $(dir $@)
 	$(AS) $< -o $@
 
-OBJECTS=$(addprefix ../obj/, fb.o kmain.o arch/$(ARCH)/boot.o)
+OBJECTS=$(addprefix ../obj/, fb.o kmain.o arch/$(ARCH)/boot.o arch/$(ARCH)/io.o)
 BINARY=../../img/boot/kdev.bin
 
-.PHONY:	all install-headers clean
+.PHONY:	all clean
 
 all:	$(BINARY)
 
 $(BINARY):	$(OBJECTS) ../../img/usr/lib/libk.a
+	mkdir -p ../../img/boot
 	$(CC) -T arch/i386/linker.ld -o $@ $(CFLAGS) $(OBJECTS) -nostdlib -lk -lgcc
 
 clean:
-	rm -rf ../obj 
-	rm -f $(BINARY)
+	rm -rf ../obj $(BINARY)

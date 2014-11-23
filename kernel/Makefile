@@ -1,19 +1,10 @@
+#
+# File:    kernel/Makefile
+# Author:  Christoph Landgraf
+# Purpose: Installs kernel headers into /usr/include/kernel and invokes the Makefile 
+#          in the source directory to compile libc and libk.
+#
+
 include ../config.mk
-
-../img/usr/include/kernel/%.h:	include/%.h
-	mkdir -p $(dir $@)
-	cp $< $@
-
-HEADERS=$(addprefix ../img/usr/include/kernel/, $(shell find include -name '*.h' -printf '%P\n'))
-
-.PHONY: all install-kernel install-headers clean
-
-all: install-kernel
-
-install-kernel:
-	cd src && $(MAKE)
-install-headers:	$(HEADERS)
-
-clean:
-	cd src && $(MAKE) clean
-	rm -f $(HEADERS)
+export INCLUDE_DIR=../img/usr/include/kernel/
+include ../project.mk

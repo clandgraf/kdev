@@ -7,3 +7,38 @@
  * TODO implement io functions
  *
  */
+
+	.section .text
+
+	.globl inb
+	.type inb, @function
+inb:
+	ret
+
+	.globl inw
+	.type inw, @function
+inw:
+	ret
+
+	.globl inl
+	.type inl, @function
+inl:
+	ret
+
+	.globl outb
+	.type outb, @function
+outb:
+	movw 4(%esp), %dx
+	movb 8(%esp), %al
+	outb %al, %dx
+	ret
+
+	.globl outw
+	.type outw, @function
+outw:
+	ret
+
+	.globl outl
+	.type outl, @function
+outl:
+	ret
