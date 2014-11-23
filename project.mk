@@ -20,7 +20,7 @@ HEADERS=$(addprefix $(INCLUDE_DIR), $(shell find include -name '*.h' -printf '%P
 
 all: install-objects
 
-install-objects:
+install-objects:	install-headers
 	cd src && $(MAKE)
 install-headers:	$(HEADERS)
 

@@ -1,9 +1,20 @@
 Kernel:
 
-- fb_putchar suppports no newlines.
+- refactor fb.c/fb.h: 
+  - separate vga-specific stuff from interface
+  - rename to something more specific
 - implement i/o ports
-- set cursor in text_mode
+- implement gdt and idt
+
+
+LibC:
+
+- printf: conversion of negative unsigned numbers.
+
 
 Project Structure:
 
-- have kernel includes in separate include directory, include these always from isystem.
+- Build-System:
+  - move src Makefiles up one level into project Makefiles somehow.
+  - move more stuff into config.mk
+  - use less relative filepaths

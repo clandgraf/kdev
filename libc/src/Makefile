@@ -6,11 +6,11 @@
 
 include ../../config.mk
 
-CFLAGS=-isystem ../../img/usr/include -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+CFLAGS=-isystem $(SYS_ROOT)/usr/include -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
 ## Output Variables
 
-LIB_PREFIX=../../img/usr/lib
+LIB_PREFIX=$(SYS_ROOT)/usr/lib
 LIBK=$(LIB_PREFIX)/libk.a
 LIBC=$(LIB_PREFIX)/libc.a
 LIBS=$(LIBK) $(LIBC)

@@ -7,6 +7,7 @@
 
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
 
 #include <kernel/fb.h>
 #include <kernel/arch/i386/io.h>
@@ -95,8 +96,17 @@ void fb_setcellat(char c, fb_attrib_t attrib, int x, int y)
 void fb_newline()
 {
     fb_column = 0;
-    if (++fb_row == FB_HEIGHT)
-	fb_row = 0;
+    if (++fb_row == FB_HEIGHT) {
+	// Make room for new row
+	memmove(fb_buffer,
+		fb_buffer + FB_INDEX(0, 1),
+		FB_WIDTH * (FB_HEIGHT - 1) * 2);
+	fb_row--;
+
+	// Clear new row
+	for (unsigned int x = 0; x < FB_WIDTH; x++)
+	    fb_setcellat(' ', fb_attrib, x, fb_row);
+    }
 }
 
 
@@ -106,7 +116,6 @@ void fb_putchar(char c)
 	fb_newline();
     else {
 	fb_setcellat(c, fb_attrib, fb_column, fb_row);
-	fb_setcursor(fb_row, fb_column);
 
 	if (++fb_column == FB_WIDTH)
 	    fb_newline();

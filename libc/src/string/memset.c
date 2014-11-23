@@ -8,12 +8,13 @@
 
 #include <string.h>
 
-uint8_t * memset(uint8_t * addr, uint8_t value, size_t n)
+void * memset(void * addr, int value, size_t n)
 {
     uint8_t * addr_ = addr;
+    uint8_t value_ = value;
 
     while (n-- > 0)
-	*addr_++ = value;
+	*addr_++ = value_;
 
     return addr;
 }

@@ -7,6 +7,7 @@
  */
 
 #include <stdio.h>
+#include <stddef.h>
 #include <stdarg.h>
 
 static const char digit_to_char[] = {
@@ -14,25 +15,55 @@ static const char digit_to_char[] = {
     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',  
 };
 
-static unsigned int print_signed(signed int i, unsigned int base)
+static size_t print_string(const char * str)
+{
+    size_t len = 0;
+    
+    for (; *str; len++, str++)
+	putchar(*str);
+    
+    return len;
+}
+
+static size_t print_signed_r(signed int i, unsigned int base)
 {
     if (i == 0)
 	return 0;
 
     //TODO this might be problematic due to how % treats negative numbers
-    unsigned int cnt = print_signed(i / base, base) + 1;
+    unsigned int cnt = print_signed_r(i / base, base) + 1;
     putchar(digit_to_char[i % base]);
     return cnt;
 }
 
-static unsigned int print_unsigned(unsigned int i, unsigned int base)
+static size_t print_signed(signed int i, unsigned int base)
+{
+    if (i == 0) {
+	putchar('0');
+	return 1;
+    }
+
+    return print_signed_r(i , base);
+}
+
+static size_t print_unsigned_r(unsigned int i, unsigned int base)
 {
     if (i == 0)
 	return 0;
     
-    unsigned int cnt = print_unsigned(i / base, base) + 1;
+    unsigned int cnt = print_unsigned_r(i / base, base) + 1;
     putchar(digit_to_char[i % base]);
     return cnt;
+}
+
+static size_t print_unsigned(unsigned int i, unsigned int base)
+{
+    if (i == 0) {
+	putchar('0');
+	return 1;
+    }
+    
+    return print_unsigned_r(i, base);
 }
 
 int printf(const char * fmt, ...)
@@ -57,6 +88,9 @@ int printf(const char * fmt, ...)
 	case '%':
 	    putchar('%');
 	    cnt++;
+	    break;
+	case 's':
+	    cnt += print_string(va_arg(varargs, const char *));
 	    break;
 	case 'd':
 	case 'i':

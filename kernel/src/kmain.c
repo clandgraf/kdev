@@ -15,5 +15,8 @@ void kmain()
 {
     fb_init();
     
-    printf("Hello, Plan %x.\nNewline", 9);
+    int i;
+    for (int i = 0; i < 24; i++) {
+	printf("Hello %x.\n", i);
+    }
 }

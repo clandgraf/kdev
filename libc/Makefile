@@ -6,5 +6,5 @@
 #
 
 include ../config.mk
-export INCLUDE_DIR=../img/usr/include/
+export INCLUDE_DIR=$(SYS_ROOT)/usr/include/
 include ../project.mk

@@ -6,10 +6,7 @@
 
 include ../../config.mk
 
-.SUFFIXES:
-.SUFFIXES: .c .o .s .h .bin
-
-CFLAGS=-std=gnu99 --sysroot ../../img -isystem ../../img/usr/include/ -ffreestanding -O2 -Wall -Wextra
+CFLAGS=-std=gnu99 --sysroot $(SYS_ROOT) -isystem $(SYS_ROOT)/usr/include/ -ffreestanding -O2 -Wall -Wextra
 LDFLAGS=-ffreestanding -O2 
 
 ../obj/%.o: %.c
@@ -20,14 +17,14 @@ LDFLAGS=-ffreestanding -O2
 	$(AS) $< -o $@
 
 OBJECTS=$(addprefix ../obj/, fb.o kmain.o arch/$(ARCH)/boot.o arch/$(ARCH)/io.o)
-BINARY=../../img/boot/kdev.bin
+BINARY=$(SYS_ROOT)/boot/kdev.bin
 
 .PHONY:	all clean
 
 all:	$(BINARY)
 
-$(BINARY):	$(OBJECTS) ../../img/usr/lib/libk.a
-	mkdir -p ../../img/boot
+$(BINARY):	$(OBJECTS) $(SYS_ROOT)/usr/lib/libk.a
+	mkdir -p $(SYS_ROOT)/boot
 	$(CC) -T arch/i386/linker.ld -o $@ $(CFLAGS) $(OBJECTS) -nostdlib -lk -lgcc
 
 clean:

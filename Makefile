@@ -6,9 +6,6 @@
 
 include config.mk
 
-SUFFIXES=
-SUFFIXES=.iso .bin
-
 .PHONY:	all run disc-image kernel libs clean install-headers
 
 all:	kdev.iso
@@ -16,12 +13,12 @@ all:	kdev.iso
 run:	kdev.iso
 	qemu-system-i386 -cdrom kdev.iso
 
-kdev.iso:	img/boot/kdev.bin
-	mkdir -p img/boot/grub
-	cp grub.cfg img/boot/grub
+kdev.iso:	$(SYS_ROOT)/boot/kdev.bin
+	mkdir -p $(SYS_ROOT)/boot/grub
+	cp grub.cfg $(SYS_ROOT)/boot/grub
 	grub-mkrescue -o $@ img
 
-img/boot/kdev.bin:	install-headers libs
+$(SYS_ROOT)/boot/kdev.bin:	install-headers libs
 	cd kernel/src && $(MAKE)
 
 install-headers:
@@ -34,6 +31,6 @@ libs:
 clean:
 	cd kernel && $(MAKE) clean
 	cd libc && $(MAKE) clean
-	rm -rf img/usr
+	rm -rf $(SYS_ROOT)
 	rm -f kdev.iso
 	find . -name "*~" -exec rm {} \;

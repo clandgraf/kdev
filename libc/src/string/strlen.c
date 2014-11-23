@@ -1,7 +1,8 @@
 /*
  *
- * File:   strlen.c
- * Author: Christoph Landgraf
+ * File:    strlen.c
+ * Author:  Christoph Landgraf
+ * Purpose: Defines the libc function strlen.
  *
  */
 

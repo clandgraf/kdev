@@ -13,12 +13,25 @@
 #include <stdint.h>
 
 /**
- * @brief Returns the length of string \a str.
+ * @brief Searches the first \a n bytes at \a addr for the first occurence of \a chr
  *
- * @param str The string whose length to return.
- * @return The length of the string.
+ * @param addr The address at which to start the search.
+ * @param chr The character to search for.
+ * @param n The number of bytes to search.
+ * @return The address at which \a chr occured first, or NULL if \a chr was not found.
  */
-size_t strlen(const char * str);
+void * memchr(const void * addr, int chr, size_t n);
+
+/**
+ * @brief Compare to memory regions.
+ *
+ * @param s1 The offset of the first region.
+ * @param s2 The offset of the second region.
+ * @param n The length of the two regions.
+ * @return 0 if regions are equal, negative if first region 
+ *         is smaller, positive if first region is larger.
+ */
+int memcmp(const void * s1, const void * s2, size_t n);
 
 /**
  * @brief Copies \a n bytes from address \a src 
@@ -50,7 +63,33 @@ void * memmove(void * dst, void * src, size_t n);
  * @param n The number of bytes to set
  * @return The address.
  */
-uint8_t * memset(uint8_t * addr, uint8_t value, size_t n);
+void * memset(void * addr, int value, size_t n);
 
+/**
+ * @brief Appends string \a src to string \a dest.
+ *
+ * @param dest The string to which \a src is appended
+ * @param src The string that is appended to \a dest.
+ * @return \a dest.
+ */
+char * strcat(char * dest, const char * src);
+
+/**
+ * @brief Searches for the first occurence of \a c in \a str.
+ *
+ * @param str The string in which to search.
+ * @param c The character for which to search.
+ * @return NULL if \a c is not found, else the address 
+ *         of the first occurence.
+ */
+char * strchr(const char * str, int c);
+
+/**
+ * @brief Returns the length of string \a str.
+ *
+ * @param str The string whose length to return.
+ * @return The length of the string.
+ */
+size_t strlen(const char * str);
 
 #endif
