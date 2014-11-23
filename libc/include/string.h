@@ -85,6 +85,25 @@ char * strcat(char * dest, const char * src);
 char * strchr(const char * str, int c);
 
 /**
+ * @brief Compares two strings.
+ *
+ * @param str1 The first string.
+ * @param str2 The second string.
+ * @return an integer less than, greater than or equal to 0 if 
+ *         \a str1 is less than, greater than or matches \a str2.
+ */
+int strcmp(const char * str1, const char * str2);
+
+/**
+ * @brief Copies a string to a buffer.
+ *
+ * @param dest the buffer to copy to.
+ * @param src the string to copy.
+ * @return a pointer to the buffer copied to.
+ */
+char * strcpy(char * dest, const char * src);
+
+/**
  * @brief Returns the length of string \a str.
  *
  * @param str The string whose length to return.
