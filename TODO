@@ -1,10 +1,7 @@
 Kernel:
 
-- refactor fb.c/fb.h: 
-  - separate vga-specific stuff from interface
-  - rename to something more specific
 - implement i/o ports
-- implement gdt and idt
+- implement idt
 
 
 LibC:

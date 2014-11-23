@@ -9,13 +9,12 @@
  *
  */
 
-#ifndef __FB_H__
-#define __FB_H__
+#ifndef __VGA_TEXT_MODE_H__
+#define __VGA_TEXT_MODE_H__
 
 #include <stdint.h>
 
-
-typedef enum fb_color {       /* Color Attributes for VGA mode */
+typedef enum vga_tm_color {       /* Color Attributes for VGA mode */
     COLOR_BLACK         = 0x0,
     COLOR_BLUE          = 0x1,
     COLOR_GREEN         = 0x2,
@@ -33,14 +32,11 @@ typedef enum fb_color {       /* Color Attributes for VGA mode */
     COLOR_LIGHT_MAGENTA = 0xD,
     COLOR_LIGHT_BROWN   = 0xE,
     COLOR_WHITE         = 0xF,
-} fb_color_t;
+} vga_tm_color_t;
 
+typedef uint8_t  vga_tm_attrib_t; /* Attribute type. Combines Foreground and Background Color */
+typedef uint16_t vga_tm_cell_t;   /* Cell type. Combines Attribute and Character */
 
-typedef uint8_t  fb_attrib_t; /* Attribute type. Combines Foreground and Background Color */
-typedef uint16_t fb_cell_t;   /* Cell type. Combines Attribute and Character */
-
-void fb_init();
-void fb_clear();
-void fb_putchar(char c);
+#include <kernel/console.h>
 
 #endif

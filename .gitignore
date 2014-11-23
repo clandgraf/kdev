@@ -3,6 +3,5 @@ cross/tar/
 kernel/obj/
 libc/obj/
 kdev.iso
-img/usr/
-img/boot/kdev.bin
+img/
 *~

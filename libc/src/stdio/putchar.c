@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #ifdef __IS_KERNEL
-#include <kernel/fb.h>
+#include <kernel/console.h>
 #endif
 
 int putchar(int ic)
@@ -16,7 +16,7 @@ int putchar(int ic)
     char c = (char) ic;
     
 #ifdef __IS_KERNEL
-    fb_putchar(c);
+    con_putchar(c);
 #else
     // TODO Implement putchar
 #warning "'putchar.c' is missing definition for libc!"

@@ -16,7 +16,12 @@ LDFLAGS=-ffreestanding -O2
 	mkdir -p $(dir $@)
 	$(AS) $< -o $@
 
-OBJECTS=$(addprefix ../obj/, fb.o kmain.o arch/$(ARCH)/boot.o arch/$(ARCH)/io.o)
+OBJECTS=$(addprefix ../obj/, \
+	kmain.o \
+	arch/$(ARCH)/boot.o \
+	arch/$(ARCH)/io.o \
+	arch/$(ARCH)/vga/text_mode.o \
+	arch/$(ARCH)/gdt.o)
 BINARY=$(SYS_ROOT)/boot/kdev.bin
 
 .PHONY:	all clean
