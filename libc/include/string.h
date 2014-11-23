@@ -31,6 +31,17 @@ size_t strlen(const char * str);
 void * memcpy(void * dst, void * src, size_t n);
 
 /**
+ * @brief Copies \a n bytes from address \a src
+ *        to address \a dst. The memory regions
+ *        may overlap.
+ *
+ * @param dst The destination address.
+ * @param src The source address.
+ * @return The destination address.
+ */
+void * memmove(void * dst, void * src, size_t n);
+
+/**
  * @brief Sets the first \a n bytes at \a addr 
  *        to value \a value.
  *
@@ -40,5 +51,6 @@ void * memcpy(void * dst, void * src, size_t n);
  * @return The address.
  */
 uint8_t * memset(uint8_t * addr, uint8_t value, size_t n);
+
 
 #endif
