@@ -1,5 +1,6 @@
 Kernel:
 
+- read multiboot structure
 - implement i/o ports
 - implement idt
 

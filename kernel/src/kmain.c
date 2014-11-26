@@ -7,17 +7,16 @@
  */
 
 #include <kernel/console.h>
+#include <kernel/multiboot.h>
 #include <stdio.h>
 
 #if defined(__cplusplus)
 extern "C"
 #endif
-void kmain()
+void kmain(mboot_info_t * mbinfo)
 {
     con_init();
     
-    int i;
-    for (int i = 0; i < 24; i++) {
-	printf("Hello %x.\n", i);
-    }
+    printf("Multiboot Version:\t%x\n", mbinfo->flags);
+    printf("Memory (Low/High):\t%d/%d\n", mbinfo->mem_lo, mbinfo->mem_hi);
 }

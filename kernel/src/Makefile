@@ -6,22 +6,25 @@
 
 include ../../config.mk
 
-CFLAGS=-std=gnu99 --sysroot $(SYS_ROOT) -isystem $(SYS_ROOT)/usr/include/ -ffreestanding -O2 -Wall -Wextra
+CFLAGS=-std=gnu99 --sysroot $(SYS_ROOT) -isystem $(SYS_ROOT)/usr/include/ -ffreestanding -O2 -Wall -Wextra -Wpadded
 LDFLAGS=-ffreestanding -O2 
 
-../obj/%.o: %.c
+../obj/%.c.o: %.c
 	mkdir -p $(dir $@)
 	$(CC) -c $< -o $@ $(CFLAGS) -D__IS_KERNEL
-../obj/%.o: %.s
+../obj/%.s.o: %.s
 	mkdir -p $(dir $@)
 	$(AS) $< -o $@
 
-OBJECTS=$(addprefix ../obj/, \
-	kmain.o \
-	arch/$(ARCH)/boot.o \
-	arch/$(ARCH)/io.o \
-	arch/$(ARCH)/vga/text_mode.o \
-	arch/$(ARCH)/gdt.o)
+OBJECTS=$(addsuffix .o, $(addprefix ../obj/, \
+		$(shell find . -path "./arch" -prune -name "*.s" -printf "%P\n" -o -name "*.c" -printf "%P\n") \
+		$(shell find arch/$(ARCH)/ -name "*.s" -o -name "*.c")))
+	# kmain.o \
+	# arch/$(ARCH)/boot.o \
+	# arch/$(ARCH)/io.o \
+	# arch/$(ARCH)/vga/text_mode.o \
+	# arch/$(ARCH)/gdt.o \
+	# arch/$(ARCH)/gdt_flush.o)
 BINARY=$(SYS_ROOT)/boot/kdev.bin
 
 .PHONY:	all clean

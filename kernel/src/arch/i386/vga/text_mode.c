@@ -110,13 +110,22 @@ void con_newline()
 
 void con_putchar(char c)
 {
-    if (c == '\n')
+    switch (c) {
+    case '\n':
 	con_newline();
-    else {
+	break;
+    case '\t': {
+	int indent = 4 - (vga_tm_column % 4);
+	for (int i = 0; i < indent; i++)
+	    con_putchar(' ');
+	break;
+    }
+    default:
 	vga_tm_setcellat(c, vga_tm_attrib, vga_tm_column, vga_tm_row);
 
 	if (++vga_tm_column == VGA_TM_WIDTH)
 	    con_newline();
+	break;
     }
 
     vga_tm_setcursor(vga_tm_row, vga_tm_column);

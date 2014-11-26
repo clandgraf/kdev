@@ -48,7 +48,7 @@ struct gdt_entry gdt[3];
 struct gdt_ptr gdtp;
 
 /* defined in kernel/src/arch/i386/boot.s */
-extern void gdt_flush();
+extern void gdt_flush(void);
 
 void gdt_set_gate(int idx, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags)
 {
@@ -63,7 +63,7 @@ void gdt_set_gate(int idx, uint32_t base, uint32_t limit, uint8_t access, uint8_
 }
 
 /* called in kernel/src/arch/i386/boot.s */
-extern void gdt_install()
+extern void gdt_init(void)
 {
     gdtp.lmt = sizeof(struct gdt_entry) * 3 - 1;
     gdtp.base  = (void *) &gdt[0];

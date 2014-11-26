@@ -27,38 +27,22 @@ stack_bottom:
 	.skip 16384
 stack_top:
 
-	/* From kernel/src/arch/i386/gdt.c */
-	.global gdt_install
+	/* extern void gdt_install(void): from kernel/src/arch/i386/gdt.c */
+	.global gdt_init
 	
 	/* Entry Point of the kernel */
 	.section .text
 	.global _start
 	.type _start, @function
 _start:
-	movl $stack_top, %esp
-	call gdt_install
+	movl $stack_top, %esp     /* Initialize Stack */
+	push %ebx                 /* Save ebx, this is passed to kmain */
+	call gdt_init             /* Initialize GDT */
 	call kmain
 
 	cli
 	hlt
 .Lhang:
 	jmp .Lhang
-
-	/* Install Global Descriptor Table */
-	.section .text
-	.extern gdtp
-	.global gdt_flush
-	.type gdt_flush, @function
-gdt_flush:
-	lgdt gdtp
-	movw $0x10, %ax
-	movw %ax, %ds
-	movw %ax, %es
-	movw %ax, %fs
-	movw %ax, %gs
-	movw %ax, %ss
-	ljmp $0x08, $flush2
-flush2:
-	ret
 	
 	.size _start, . - _start
