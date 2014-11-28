@@ -1,7 +1,11 @@
 Kernel:
 
-- read multiboot structure
+- test multiboot structure
 - implement i/o ports
+- vga:
+  - palette setting in textmode
+  - implement VESA graphic modes
+  - framebuffer in graphic modes
 - implement idt
 
 
