@@ -35,10 +35,10 @@ stack_top:
 	.global _start
 	.type _start, @function
 _start:
-	movl $stack_top, %esp     /* Initialize Stack */
-	push %ebx                 /* Save ebx, this is passed to kmain */
-	call gdt_init             /* Initialize GDT */
-	call kmain
+	movl $stack_top, %esp     /* Initialize Stack... */
+	push %ebx                 /* ... multiboot info addr is in %ebx, this is passed to kmain ... */
+	call kmain                /* ... call main ... */
+	add  $4, %ebx             /* and clear the stack */
 
 	cli
 	hlt

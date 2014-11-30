@@ -6,6 +6,7 @@
  *
  */
 
+#include <kernel/arch.h>
 #include <kernel/console.h>
 #include <kernel/multiboot.h>
 #include <stdio.h>
@@ -15,8 +16,9 @@ extern "C"
 #endif
 void kmain(mboot_info_t * mbinfo)
 {
+    arch_init();
     con_init();
-    
+
     printf("Multiboot Version:\t%x\n", mbinfo->flags);
     printf("Memory (Low/High):\t%d/%d\n", mbinfo->mem_lo, mbinfo->mem_hi);
 }

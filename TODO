@@ -1,12 +1,16 @@
 Kernel:
 
+- check gdt/idt code for http://wiki.osdev.org/James_Molloy%27s_Tutorial_Known_Bugs:
+  - SYSV ABI problems? 
+  - unnecessary structure packing?
+
+- implement idt
 - test multiboot structure
 - implement i/o ports
 - vga:
   - palette setting in textmode
   - implement VESA graphic modes
   - framebuffer in graphic modes
-- implement idt
 
 
 LibC:

@@ -12,16 +12,13 @@
 #define IDT_TYPE_INT_32  0xe
 #define IDT_TYPE_TRAP_32 0xf
 
-
-
 struct idt_entry {
     uint16_t base_lo;
     uint16_t selector;
     uint8_t  zero;
     uint8_t  type_attr;
-    uint16_t base_hi;
-    
-} __attribute((packed))__;
+    uint16_t base_hi;   
+};
 
 struct idt_ptr {
     uint16_t lmt;
@@ -38,51 +35,28 @@ void idt_set_gate(int idx, uint32_t base, uint16_t selector, uint8_t gate_type, 
 {
     idt[idx].base_lo   = base & 0xffff;
     idt[idx].base_hi   = (base >> 16) & 0xffff;
-    idt[idx].selector  = selector
-    idt[idx].type_attr = (attributes << 4) & gate_type
+    idt[idx].selector  = selector;
+    idt[idx].type_attr = (attributes << 4) & gate_type;
     idt[idx].zero      = (uint8_t) 0x0;
 }
 
-extern void isr00(void);
-// ...
+#include "idt_isr_defs.h"
+#define IDT_DEFFAULT(fn) (idt_set_gate(0, (uint32_t) &fn, 0x08, IDT_TYPE_INT_32, 0x8))
 
 void idt_init(void)
 {
-    idtp.lmt  = sizeof(idt_entry) * 32 - 1;
+    idtp.lmt  = sizeof(struct idt_entry) * 32 - 1;
     idtp.base = &idt[0];
 
-    idt_set_gate(0,  &isr00, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(1,  &isr01, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(2,  &isr02, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(3,  &isr03, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(4,  &isr04, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(5,  &isr05, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(6,  &isr06, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(7,  &isr07, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(8,  &isr08, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(9,  &isr09, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(10, &isr10, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(11, &isr11, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(12, &isr12, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(13, &isr13, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(14, &isr14, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(15, &isr15, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(16, &isr16, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(17, &isr17, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(18, &isr18, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(19, &isr19, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(20, &isr20, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(21, &isr21, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(22, &isr22, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(23, &isr23, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(24, &isr24, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(25, &isr25, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(26, &isr26, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(27, &isr27, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(28, &isr28, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(29, &isr29, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(30, &isr30, 0x08, IDT_TYPE_INT_32, 0x8);
-    idt_set_gate(31, &isr31, 0x08, IDT_TYPE_INT_32, 0x8);
+    /* Setup gates for hardware faults */
+    IDT_DEFFAULT(isr0);  IDT_DEFFAULT(isr1);  IDT_DEFFAULT(isr2);  IDT_DEFFAULT(isr3);
+    IDT_DEFFAULT(isr4);  IDT_DEFFAULT(isr5);  IDT_DEFFAULT(isr6);  IDT_DEFFAULT(isr7);
+    IDT_DEFFAULT(isr8);  IDT_DEFFAULT(isr9);  IDT_DEFFAULT(isr10); IDT_DEFFAULT(isr11);
+    IDT_DEFFAULT(isr12); IDT_DEFFAULT(isr13); IDT_DEFFAULT(isr14); IDT_DEFFAULT(isr15);
+    IDT_DEFFAULT(isr16); IDT_DEFFAULT(isr17); IDT_DEFFAULT(isr18); IDT_DEFFAULT(isr19);
+    IDT_DEFFAULT(isr20); IDT_DEFFAULT(isr21); IDT_DEFFAULT(isr22); IDT_DEFFAULT(isr23);
+    IDT_DEFFAULT(isr24); IDT_DEFFAULT(isr25); IDT_DEFFAULT(isr26); IDT_DEFFAULT(isr27);
+    IDT_DEFFAULT(isr28); IDT_DEFFAULT(isr29); IDT_DEFFAULT(isr30); IDT_DEFFAULT(isr31);
 
     idt_flush();
 }
