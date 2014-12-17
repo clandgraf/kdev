@@ -16,7 +16,7 @@ LDFLAGS=-ffreestanding -O2
 	mkdir -p $(dir $@)
 	$(AS) $< -o $@
 
-OBJECTS=$(addsuffix .o, $(addprefix ../obj/, \
+#OBJECTS=$(addsuffix .o, $(addprefix ../obj/, \
 		$(shell find . -path "./arch" -prune -name "*.s" -printf "%P\n" -o -name "*.c" -printf "%P\n") \
 		$(shell find arch/$(ARCH)/ -name "*.s" -o -name "*.c")))
 	# kmain.o \
@@ -25,6 +25,14 @@ OBJECTS=$(addsuffix .o, $(addprefix ../obj/, \
 	# arch/$(ARCH)/vga/text_mode.o \
 	# arch/$(ARCH)/gdt.o \
 	# arch/$(ARCH)/gdt_flush.o)
+
+OBJECTS=$(addsuffix .o, $(addprefix ../obj/, \
+		$(call file_list, ., , '*.s', arch) \
+		$(call file_list, ., , '*.c', arch) \
+		$(call file_list, ., arch/$(ARCH), '*.s') \
+		$(call file_list, ., arch/$(ARCH), '*.c') \
+		))
+
 BINARY=$(SYS_ROOT)/boot/kdev.bin
 
 .PHONY:	all clean

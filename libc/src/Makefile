@@ -15,8 +15,8 @@ LIBK=$(LIB_PREFIX)/libk.a
 LIBC=$(LIB_PREFIX)/libc.a
 LIBS=$(LIBK) $(LIBC)
 
-SRC=$(shell find . -name '*.c' -printf '%P\n')
-OBJS=$(SRC:.c=.o)
+SRCS=$(call file_list, ., , '*.c')
+OBJS=$(SRCS:.c=.o)
 LIBC_OBJS=$(addprefix ../obj/libc/, $(OBJS))
 LIBK_OBJS=$(addprefix ../obj/libk/, $(OBJS))
 
