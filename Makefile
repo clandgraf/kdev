@@ -8,7 +8,7 @@ include config.mk
 
 .PHONY:	all run disc-image kernel libs clean install-headers
 
-all:	kdev.iso
+all:	$(SYS_ROOT)/boot/kdev.bin
 
 run:	kdev.iso
 	qemu-system-i386 -cdrom kdev.iso

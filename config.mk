@@ -13,18 +13,20 @@ SUFFIXES=.c .h .s. .iso .bin .o
 ###
 
 # Setup Toolchain and directories
-ARCH=i386
+export ARCH=i386
 
-AS=i686-elf-as
-CC=i686-elf-gcc
-AR=i686-elf-ar
+export AS=i686-elf-as
+export CC=i686-elf-gcc
+export AR=i686-elf-ar
+export CPP=i686-elf-cpp
+export APP=$(DEV_ROOT)/util/app.sh
 
-SYS_ROOT_NAME=img
+export SYS_ROOT_NAME=img
 
 
 # Setup Directory Structure
-DEV_ROOT=$(dir $(lastword $(MAKEFILE_LIST)))
-SYS_ROOT=$(DEV_ROOT)$(SYS_ROOT_NAME)
+export DEV_ROOT=$(dir $(lastword $(MAKEFILE_LIST)))
+export SYS_ROOT=$(DEV_ROOT)$(SYS_ROOT_NAME)
 
 
 ###
@@ -33,10 +35,10 @@ SYS_ROOT=$(DEV_ROOT)$(SYS_ROOT_NAME)
 
 # detect sed
 ifeq ($(shell echo a | sed s/a\?/b/g), a)
-SED=sed -E
+export SED=sed -E
 $(info BSD sed detected: using $(SED))
 else
-SED=sed
+export SED=sed
 $(info GNU sed detected: using $(SED))
 endif
 

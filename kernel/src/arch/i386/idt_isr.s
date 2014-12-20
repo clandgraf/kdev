@@ -1,37 +1,46 @@
 	/*
+	 *
 	 * File:    kernel/src/arch/i386/idt_isr.s
 	 * Author:  Christoph Landgraf
-	 * Purpose: interrupt service routines
+	 * Purpose: Interrupt Service Routines: Defines
+	 *          Assembler Level Interrupt Handlers
+	 *
 	 */
 
+	
 	/* macro for exceptions without errno */
 
-	.section text
-
+	.section .text
+	.extern isr_dispatch
 isr_common:
-	pusha
-	popa
+	pusha			/* Save Registers */
+	call isr_dispatch       /* Call C level ISR Handler */
+	popa			/* Restore Registers */
+	add $8, %esp		/* Remove Interrupt ID and Error Code */
 	iret
 
+	
 	/* isr_noerr: Macro for ISRs that push no error code; push a dummy value */
+
 	.macro isr_noerr nr
 	.global isr\nr
 	.type isr\nr, @function
 isr\nr:
-	push $0
-	push $\nr
+	pushl $0
+	pushl $\nr
 	jmp isr_common
 	.endm
-
+	
 	/* isr_err: Macro for ISRs with error code. */
+
 	.macro isr_err nr
 	.global isr\nr
 	.type isr\nr, @function
-isr\nr:	
-	push $\nr
+isr\nr:
+	pushl $\nr
 	jmp isr_common
 	.endm
-
+	
 	/* isr entry points */
 	isr_noerr 0
 	isr_noerr 1
@@ -41,13 +50,13 @@ isr\nr:
 	isr_noerr 5
 	isr_noerr 6
 	isr_noerr 7
-	isr_err   8
+	isr_err 8
 	isr_noerr 9
-	isr_err   10
-	isr_err   11
-	isr_err   12
-	isr_err   13
-	isr_err   14
+	isr_err 10
+	isr_err 11
+	isr_err 12
+	isr_err 13
+	isr_err 14
 	isr_noerr 15
 	isr_noerr 16
 	isr_noerr 17

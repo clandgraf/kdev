@@ -11,10 +11,9 @@
 include ../config.mk
 
 $(INCLUDE_DIR)%.h:	include/%.h
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	cp $< $@
 
-#HEADERS=$(addprefix $(INCLUDE_DIR), $(shell find include -name '*.h' -printf '%P\n')
 HEADERS=$(addprefix $(INCLUDE_DIR), $(call file_list, include, , '*.h'))
 
 .PHONY:	all install-objects install-headers clean

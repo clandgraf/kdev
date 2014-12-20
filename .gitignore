@@ -3,6 +3,7 @@ cross/tar/
 kernel/obj/
 libc/obj/
 kdev.iso
+kdev.img
 img/
 doc/resources
 *~

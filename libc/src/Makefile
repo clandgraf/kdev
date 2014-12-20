@@ -23,13 +23,13 @@ LIBK_OBJS=$(addprefix ../obj/libk/, $(OBJS))
 ## Template Rules
 
 ../obj/libc/%.o:	%.c
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	$(CC) -c $< -o $@ $(CFLAGS)
 ../obj/libk/%.o:	%.c
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	$(CC) -c $< -o $@ $(CFLAGS) -D__IS_KERNEL
 $(LIB_PREFIX)/%.a:
-	mkdir -p $(dir $@)
+	@mkdir -p $(dir $@)
 	$(AR) rcs $@ $^
 
 ## Targets
