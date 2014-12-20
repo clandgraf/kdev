@@ -19,7 +19,6 @@ export AS=i686-elf-as
 export CC=i686-elf-gcc
 export AR=i686-elf-ar
 export CPP=i686-elf-cpp
-export APP=$(DEV_ROOT)/util/app.sh
 
 export SYS_ROOT_NAME=img
 
