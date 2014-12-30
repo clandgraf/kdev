@@ -40,7 +40,7 @@ _start:
 	call kmain                /* ... call main ... */
 	add  $4, %ebx             /* and clear the stack */
 
-	cli
+	//cli
 	hlt
 .Lhang:
 	jmp .Lhang

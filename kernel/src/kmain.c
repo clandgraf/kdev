@@ -24,6 +24,7 @@ void kmain(mboot_info_t * mbinfo)
     printf("Multiboot Version:\t%x\n", mbinfo->flags);
     printf("Memory (Low/High):\t%d/%d\n", mbinfo->mem_lo, mbinfo->mem_hi);
 
+    arch_start();
     asm volatile("int $0x0");
     asm volatile("int $0x1");
     asm volatile("int $0x2");

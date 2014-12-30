@@ -14,7 +14,9 @@
 	.extern isr_dispatch
 isr_common:
 	pusha			/* Save Registers */
+	push %esp
 	call isr_dispatch       /* Call C level ISR Handler */
+	add $4, %esp
 	popa			/* Restore Registers */
 	add $8, %esp		/* Remove Interrupt ID and Error Code */
 	iret
@@ -42,6 +44,7 @@ isr\nr:
 	.endm
 	
 	/* isr entry points */
+	/* Hardware Faults */
 	isr_noerr 0
 	isr_noerr 1
 	isr_noerr 2
@@ -74,3 +77,21 @@ isr\nr:
 	isr_noerr 29
 	isr_noerr 30
 	isr_noerr 31
+
+	/* IRQs */
+	isr_noerr 32
+	isr_noerr 33
+	isr_noerr 34
+	isr_noerr 35
+	isr_noerr 36
+	isr_noerr 37
+	isr_noerr 38
+	isr_noerr 39
+	isr_noerr 40
+	isr_noerr 41
+	isr_noerr 42
+	isr_noerr 43
+	isr_noerr 44
+	isr_noerr 45
+	isr_noerr 46
+	isr_noerr 47
