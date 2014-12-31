@@ -1,12 +1,17 @@
 Kernel:
 
+- finish implementing i/o ports
+
 - check gdt/idt code for http://wiki.osdev.org/James_Molloy%27s_Tutorial_Known_Bugs:
   - SYSV ABI problems? 
   - unnecessary structure packing?
+  - interrupt handling in idt_isr.s:
+    - sti, cli needed?
 
-- implement idt
-- test multiboot structure
-- implement i/o ports
+- basic process and memory management
+
+- data structures: linked lists
+
 - vga:
   - palette setting in textmode
   - implement VESA graphic modes
@@ -15,7 +20,8 @@ Kernel:
 
 LibC:
 
-- printf: conversion of negative unsigned numbers.
+- printf: conversion of signed numbers.
+          conversion of floating point values
 
 
 Project Structure:
