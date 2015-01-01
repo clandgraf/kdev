@@ -13,6 +13,8 @@
 	.globl inb
 	.type inb, @function
 inb:
+	movw 4(%esp), %dx
+	inb %dx
 	ret
 
 	.globl inw

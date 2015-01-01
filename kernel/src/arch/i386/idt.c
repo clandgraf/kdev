@@ -37,6 +37,30 @@
 #define IRQ_CMD_RESET    0x20
 
 
+/* CPU Exceptions */
+#define EXC_DIV_BY_ZERO  0x00
+#define EXC_DEBUG        0x01
+#define EXC_NMI          0x02
+#define EXC_BREAK        0x03
+#define EXC_OVERFLOW     0x04
+#define EXC_BOUND_RANGE  0x05
+#define EXC_INVALID_OPC  0x06
+
+#define EXC_DOUBLE_FAULT 0x08
+
+const char * exception_strings[] = {
+    "Divide By Zero",
+    "Debug",
+    "Non Maskable Interrupt",
+    "Breakpoint",
+    "Overflow",
+    "Bound Range",
+    "Invalid Opcode",
+    NULL,
+    "Double Fault",
+};
+
+
 struct idt_entry {
     uint16_t base_lo;
     uint16_t selector;
@@ -57,6 +81,18 @@ struct idt_entry idt[IDT_SIZE];
 struct idt_ptr   idtp;
 
 extern void idt_flush(void);
+
+
+void panic(uint8_t irq)
+{
+    klog_info("Kernel Panic: Fault 0x%x\n", irq);
+
+    const char * exc = exception_strings[irq];
+    if (exc)
+	klog_info("%s\n", irq);
+
+    asm volatile("cli; hlt");
+}
 
 
 void idt_set_gate(int idx, uint32_t base, uint16_t selector, uint8_t gate_type, uint8_t attributes)
@@ -110,8 +146,14 @@ void idt_init(void)
     IDT_DEFFAULT(40); IDT_DEFFAULT(41); IDT_DEFFAULT(42); IDT_DEFFAULT(43);
     IDT_DEFFAULT(44); IDT_DEFFAULT(45); IDT_DEFFAULT(46); IDT_DEFFAULT(47);
 
+    /* Update IDT Register */
     idt_flush();
+
+    /* Install Handler for Hardware Faults */
+    irq_register_handler(EXC_DIV_BY_ZERO,  &panic);
+    irq_register_handler(EXC_DOUBLE_FAULT, &panic);
 }
+
 
 /*
    In the Interrupt Handler Stubs first an error code,
@@ -120,10 +162,6 @@ void idt_init(void)
    The pusha instruction pushes eax first, so it 
    is the last field in the cpu_state structure.
  */
-
-#ifdef DEBUG
-#include <stdio.h>
-#endif
 
 irq_handler_t irq_handlers[0x100] = {
     NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,

@@ -57,5 +57,5 @@ void timer_init(uint32_t frequency)
    outb(PIT_CNT_CHAN0, (uint8_t)((divisor>>8) & 0xFF));
 
    // Setup Timer IRQ Handler
-   irq_register_handler(0x20, &timer_handle);
+   irq_register_handler(IRQ_PIT, &timer_handle);
 }
