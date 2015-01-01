@@ -6,8 +6,8 @@
  *
  */
 
-#ifndef __BITS_H__
-#define __BITS_H__
+#ifndef KERNEL_BITS_H_INCLUDED
+#define KERNEL_BITS_H_INCLUDED
 
 #define IS_BIT_SET(b, v) (v & (1 << b))
 

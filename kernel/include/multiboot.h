@@ -6,8 +6,8 @@
  *          the multiboot header from GRUB.
  */
 
-#ifndef __MULTIBOOT_H__
-#define __MULTIBOOT_H__
+#ifndef KERNEL_MULTIBOOT_H_INCLUDED
+#define KERNEL_MULTIBOOT_H_INCLUDED
 
 #include <stdint.h>
 

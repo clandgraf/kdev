@@ -1,5 +1,5 @@
-#ifndef __STDLIB_H__
-#define __STDLIB_H__
+#ifndef LIBC_STDLIB_H_INCLUDE
+#define LIBC_STDLIB_H_INCLUDE
 
 #define NULL ((void *) 0)
 

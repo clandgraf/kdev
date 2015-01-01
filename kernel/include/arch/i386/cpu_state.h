@@ -1,5 +1,5 @@
-#ifndef __CPU_STATE_H__
-#define __CPU_STATE_H__
+#ifndef KERNEL_ARCH_I386_CPU_STATE_H_INCLUDED
+#define KERNEL_ARCH_I386_CPU_STATE_H_INCLUDED
 
 typedef struct cpu_state {
     // Pushed by pusha

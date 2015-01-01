@@ -6,8 +6,8 @@
  *
  */
 
-#ifndef __CONSOLE_H__
-#define __CONSOLE_H__
+#ifndef KERNEL_CONSOLE_H_INCLUDED
+#define KERNEL_CONSOLE_H_INCLUDED
 
 /**
  * @brief Initialize the system-console.

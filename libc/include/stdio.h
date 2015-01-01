@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef __STDIO_H__
-#define __STDIO_H__
+#ifndef LIBC_STDIO_H_INCLUDED
+#define LIBC_STDIO_H_INCLUDED
 
 int putchar(int ic);
 int printf(const char * fmt, ...);

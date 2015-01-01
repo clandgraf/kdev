@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef __VGA_TEXT_MODE_H__
-#define __VGA_TEXT_MODE_H__
+#ifndef KERNEL_ARCH_I386_VGA_TEXT_MODE_H_INCLUDED
+#define KERNEL_ARCH_I386_VGA_TEXT_MODE_H_INCLUDED
 
 #include <stdint.h>
 

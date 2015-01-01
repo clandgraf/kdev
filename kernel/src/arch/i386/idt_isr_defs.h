@@ -6,8 +6,8 @@
  *
  */ 
 
-#ifndef __IDT_ISR_DEFS_H__
-#define __IDT_ISR_DEFS_H__
+#ifndef KERNEL_ARCH_I386_IDT_ISR_DEFS_H_INCLUDED
+#define KERNEL_ARCH_I386_IDT_ISR_DEFS_H_INCLUDED
 
 /* 00-31: Hardware Faults */
 extern void isr0(void);  extern void isr1(void);  extern void isr2(void);  extern void isr3(void);

@@ -6,8 +6,8 @@
  *
  */
 
-#ifndef __STRING_H__
-#define __STRING_H__
+#ifndef LIBC_STRING_H_INCLUDED
+#define LIBC_STRING_H_INCLUDED
 
 #include <stddef.h>
 #include <stdint.h>

@@ -6,8 +6,8 @@
  *
  */
 
-#ifndef __IO_H__
-#define __IO_H__
+#ifndef KERNEL_ARCH_I386_IO_H_INCLUDED
+#define KERNEL_ARCH_I386_IO_H_INCLUDED
 
 #include <stdint.h>
 
