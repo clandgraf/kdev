@@ -44,7 +44,7 @@ struct gdt_ptr {
 
 } __attribute__((packed));
 
-struct gdt_entry gdt[3];
+struct gdt_entry gdt[5];
 struct gdt_ptr   gdtp;
 
 /* defined in kernel/src/arch/i386/boot.s */
@@ -69,14 +69,18 @@ void gdt_init(void)
     gdtp.base  = (void *) &gdt[0];
 
     gdt_set_gate(0, 0, 0, 0, 0);
-    gdt_set_gate(1, 0, 0xffffffff, /* Code Segment */
-		 GDT_ACC_RING0 | GDT_ACC_PRESENT | GDT_ACC_SEGMENT | GDT_ACC_EXEC | GDT_ACC_RWABLE, // 0x9a
+    gdt_set_gate(1, 0, 0xffffffff, /* Ring 0: Code Segment */
+		 GDT_ACC_RING0 | GDT_ACC_PRESENT | GDT_ACC_SEGMENT | GDT_ACC_EXEC | GDT_ACC_RWABLE,
 		 GDT_OPSIZE_32 | GDT_GRAN_4K);
-
-    gdt_set_gate(2, /* Data Segment */
-		 0, 0xffffffff,
-		 GDT_ACC_RING0 | GDT_ACC_PRESENT | GDT_ACC_SEGMENT | GDT_ACC_RWABLE, // 0x92
+    gdt_set_gate(2, 0, 0xffffffff, /* Ring 0: Data Segment */
+		 GDT_ACC_RING0 | GDT_ACC_PRESENT | GDT_ACC_SEGMENT | GDT_ACC_RWABLE,
 		 GDT_OPSIZE_32 | GDT_GRAN_4K);
-
+    gdt_set_gate(3, 0, 0xffffffff, /* Ring 3: Code Segment */
+		 GDT_ACC_RING3 | GDT_ACC_PRESENT | GDT_ACC_SEGMENT | GDT_ACC_EXEC | GDT_ACC_RWABLE,
+		 GDT_OPSIZE_32 | GDT_GRAN_4K);
+    gdt_set_gate(4, 0, 0xffffffff, /* Ring 0: Data Segment */
+		 GDT_ACC_RING3 | GDT_ACC_PRESENT | GDT_ACC_SEGMENT | GDT_ACC_RWABLE,
+		 GDT_OPSIZE_32 | GDT_GRAN_4K);
+    
     gdt_flush();
 }
