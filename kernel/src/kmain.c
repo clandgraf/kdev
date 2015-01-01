@@ -9,9 +9,7 @@
 #include <kernel/arch.h>
 #include <kernel/console.h>
 #include <kernel/multiboot.h>
-#include <stdio.h>
-
-extern void isr0(void);
+#include <kernel/klog.h>
 
 #if defined(__cplusplus)
 extern "C"
@@ -21,8 +19,8 @@ void kmain(mboot_info_t * mbinfo)
     arch_init();
     con_init();
 
-    printf("Multiboot Version:\t%x\n", mbinfo->flags);
-    printf("Memory (Low/High):\t%d/%d\n", mbinfo->mem_lo, mbinfo->mem_hi);
+    klog_info("Multiboot Version:\t%x\n", mbinfo->flags);
+    klog_info("Memory (Low/High):\t%d/%d\n", mbinfo->mem_lo, mbinfo->mem_hi);
 
     arch_start();
 }

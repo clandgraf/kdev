@@ -2,12 +2,14 @@
  *
  * File:    kernel/src/arch/i386/timer.c
  * Author:  Christoph Landgraf
- * Purpose: Initialization of PIT and IRQ handler for PIT Interrupt
+ * Purpose: Architecture specific timer driver
+ *          Initialization of PIT and IRQ handler for PIT Interrupt
  *
  */
 
 #include <kernel/arch/i386/io.h>
 #include <kernel/arch/i386/irq.h>
+#include <kernel/klog.h>
 
 /* Registers */
 #define PIT_COMMAND   0x43 /* Command Register */
@@ -29,15 +31,16 @@
 #define PIT_CHANNEL(c)   (c << 6)    /* Bit 6-7: Channel 0-2 */
 
 
-uint32_t cnt = 0;
+/* Defined in kernel/include/timer.c */
+extern uint32_t jiffies;
 
-#include <stdio.h>
+
 void timer_handle(uint8_t irq)
 {
-    if (cnt++ == 50) {
-	printf("Tick!\n");
-	cnt = 0;
-    }
+    if (jiffies % 50 == 0)
+        klog_info("Tick %d\n", jiffies);
+
+    jiffies++;
 }
 
 
@@ -47,7 +50,7 @@ void timer_init(uint32_t frequency)
 
    // Send the command byte.
    outb(PIT_COMMAND, 
-	PIT_CHANNEL(0) | PIT_MODE(2) | PIT_FORMAT_BIN | PIT_SET_LSB_MSB);
+        PIT_CHANNEL(0) | PIT_MODE(2) | PIT_FORMAT_BIN | PIT_SET_LSB_MSB);
 
    // Send the frequency divisor.
    outb(PIT_CNT_CHAN0, (uint8_t)(divisor & 0xFF));

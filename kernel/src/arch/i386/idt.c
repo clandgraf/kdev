@@ -9,6 +9,7 @@
 #include <kernel/arch/i386/io.h>
 #include <kernel/arch/i386/irq.h>
 #include <kernel/arch/i386/cpu_state.h>
+#include <kernel/klog.h>
 
 /* IDT Parameters */
 #define IDT_TYPE_INT_16  0x6
@@ -146,10 +147,7 @@ irq_handler_t irq_handlers[0x100] = {
 
 void isr_dispatch(cpu_state_t * cpu_state)
 {
-#ifdef DEBUG
-    printf("Received Interrupt %x: Error %x!\n", cpu_state->intr, cpu_state->err);
-    printf("eflags: %x\n", cpu_state->eflags);
-#endif
+    klog_debug("Received Interrupt %x: Error %x!\n", cpu_state->intr, cpu_state->err);
     
     /* Reset PIC */
     if (cpu_state->intr >= 0x20 && cpu_state->intr <= 0x2f) {
