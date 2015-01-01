@@ -1,7 +1,8 @@
 /*
  *
- * File:   kernel/src/fb.c
- * Author: Christoph Landgraf
+ * File:    kernel/src/fb.c
+ * Author:  Christoph Landgraf
+ * Purpose: VGA text mode driver
  *
  */
 

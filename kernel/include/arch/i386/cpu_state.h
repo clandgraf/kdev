@@ -1,3 +1,11 @@
+/*
+ *
+ * File:    kernel/include/arch/i386/cpu_state.h
+ * Author:  Christoph Landgraf
+ * Purpose: Defines structures for storing the cpu-state on x86 machines
+ *
+ */ 
+
 #ifndef KERNEL_ARCH_I386_CPU_STATE_H_INCLUDED
 #define KERNEL_ARCH_I386_CPU_STATE_H_INCLUDED
 
