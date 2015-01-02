@@ -24,20 +24,45 @@
 
 <p>The configuration of the build system can be done by editing the file config.mk in the repositories root directory. The variables that might require editing are the following:</p>
 
-ARCH		  The architecture for which the kernel will be compiled.
-		  This should be set to i38. The variable controls, which of the architecture dependent source trees under the kernel/src/arch directory is compiled into the kernel.
-
-AS		  Should point to the Assembler of the Toolchain
-CC		  Should point to the C Compiler of the Toolchain
-AR		  Should point to the Archiver of the Toolchain
-
-SYS_ROOT_NAME	  The directory in which to assemble the system root, given relative to the root directory of the repository
+<table>
+  <tr>
+    <td>ARCH</td>
+    <td>The architecture for which the kernel will be compiled. This should be set to i38. The variable controls, which of the architecture dependent source trees under the kernel/src/arch directory is compiled into the kernel.</td>
+  </tr>
+  <tr>
+    <td>AS</td>
+    <td>Should point to the Assembler of the Toolchain.</td>
+  </tr>
+  <tr>
+    <td>CC</td>
+    <td>Should point to the C Compiler of the Toolchain</td>
+  </tr>
+  <tr>
+    <td>AR</td>
+    <td>Should point to the Archiver of the Toolchain</td>
+  </tr>
+  <tr>
+    <td>SYS_ROOT_NAME</td>
+    <td>The directory in which to assemble the system root, given relative to the root directory of the repository</td>
+  </tr>
+</table>
 
 <p>The build process will compile the system libraries and kernel and assemble a bootable system root in the directory specified by SYS_ROOT_NAME.</p>
 
 
 <h3>Make targets:</h3>
 
-all	Builds a bootable CD image using grub-mkrescue.
-run	Uses qemu to boot the kernel
-libs	Builds the system libraries libc (libc for applications) and libk (libc for the kernel)
+<table>
+  <tr>
+    <td>all</td>
+    <td>Builds a bootable CD image using grub-mkrescue.</td>
+  </tr>
+  <tr>
+    <td>run</td>
+    <td>Uses qemu to boot the kernel</td>
+  </tr>
+  <tr>
+    <td>libs</td>
+    <td>Builds the system libraries libc (libc for applications) and libk (libc for the kernel)</td>
+  </tr>
+</table>
