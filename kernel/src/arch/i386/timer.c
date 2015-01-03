@@ -9,7 +9,7 @@
 
 #include <kernel/arch/i386/io.h>
 #include <kernel/arch/i386/irq.h>
-#include <kernel/klog.h>
+#include <kernel/timer.h>
 
 /* Registers */
 #define PIT_COMMAND   0x43 /* Command Register */
@@ -37,9 +37,7 @@ extern uint32_t jiffies;
 
 void timer_handle(uint8_t irq)
 {
-    if (jiffies % 50 == 0)
-        klog_info("Tick %d\n", jiffies);
-
+    timer_run_handlers();
     jiffies++;
 }
 
