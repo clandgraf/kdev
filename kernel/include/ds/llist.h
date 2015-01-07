@@ -9,6 +9,8 @@
 #ifndef KERNEL_DS_LLIST_H_INCLUDED
 #define KERNEL_DS_LLIST_H_INCLUDED
 
+#include <kernel/ds/ds.h>
+
 typedef struct llist_node {
     struct llist_node * next;
     struct llist_node * prev;
