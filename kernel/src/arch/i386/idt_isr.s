@@ -16,7 +16,10 @@ isr_common:
 	pusha			/* Save Registers */
 	push %esp
 	call isr_dispatch       /* Call C level ISR Handler */
-	add $4, %esp
+	mov %eax, %esp          /* switch stack: isr_dispatch returns new task stack if .. */
+	                        /* .. task is scheduled, else the pointer passed. .. */
+	                        /* .. no need to pop parameter here, since esp already points .. */
+	                        /* .. to the cpu_state_t object */
 	popa			/* Restore Registers */
 	add $8, %esp		/* Remove Interrupt ID and Error Code */
 	iret

@@ -9,6 +9,8 @@
 #ifndef KERNEL_ARCH_I386_CPU_STATE_H_INCLUDED
 #define KERNEL_ARCH_I386_CPU_STATE_H_INCLUDED
 
+#include <stdint.h>
+
 typedef struct cpu_state {
     // Pushed by pusha
     uint32_t edi;
@@ -34,5 +36,7 @@ typedef struct cpu_state {
     uint32_t ss;
     
 } cpu_state_t;
+
+void klog_cpu_state(cpu_state_t * cpu_state);
 
 #endif

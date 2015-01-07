@@ -183,7 +183,9 @@ irq_handler_t irq_handlers[0x100] = {
     NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 };
 
-void isr_dispatch(cpu_state_t * cpu_state)
+extern cpu_state_t * task_sched(cpu_state_t * new_state);
+
+cpu_state_t * isr_dispatch(cpu_state_t * cpu_state)
 {
     klog_debug("Received Interrupt %x: Error %x!\n", cpu_state->intr, cpu_state->err);
     
@@ -199,6 +201,12 @@ void isr_dispatch(cpu_state_t * cpu_state)
     irq_handler_t handler = irq_handlers[cpu_state->intr];
     if (handler)
 	handler(cpu_state->intr);
+
+    /* Switch task */
+    if (cpu_state->intr == IRQ_PIT)
+	return task_sched(cpu_state);
+
+    return cpu_state;
 }
 
 void irq_register_handler(uint8_t irq, irq_handler_t handler)

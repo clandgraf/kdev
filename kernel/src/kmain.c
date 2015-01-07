@@ -19,6 +19,8 @@ void timer_test(void)
 }
 
 
+extern void init_tasks(void);
+
 #if defined(__cplusplus)
 extern "C"
 #endif
@@ -30,6 +32,8 @@ void kmain(mboot_info_t * mbinfo)
     klog_info("Multiboot Version:\t%x\n", mbinfo->flags);
     klog_info("Memory (Low/High):\t%d/%d\n", mbinfo->mem_lo, mbinfo->mem_hi);
 
-    timer_register_handler(100, &timer_test);
+    init_tasks();
+
+    //    timer_register_handler(100, &timer_test);
     arch_start();
 }
