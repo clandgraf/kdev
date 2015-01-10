@@ -7,15 +7,16 @@
  */
 
 #include <kernel/arch/i386/cpu_state.h>
+#include <kernel/arch/i386/task.h>
 #include <kernel/klog.h>
 #include <stdint.h>
+
 
 #define TASK_STACK_SIZE 4096
 
 typedef void (*task_entry_t)(void);
 
 typedef struct task_struct {
-    uint8_t *     stack;
     cpu_state_t * state;
     
 } task_t;
@@ -24,10 +25,6 @@ uint8_t task_stacks[2][TASK_STACK_SIZE];
 task_t tasks[2];
 int next_task_idx = -1;
 
-inline void task_break(void)
-{
-    asm volatile("hlt");
-}
 
 // Tasks
 
@@ -52,7 +49,7 @@ void task_b_fn(void)
 
 // ---
 
-void task_init(int id, task_entry_t entry)
+void task_init_task(int id, task_entry_t entry)
 {
     // Create cpu_state at end of stack, and initialize process state
     cpu_state_t * new_state = (cpu_state_t *) (task_stacks[id] + 4096 - sizeof(cpu_state_t));
@@ -69,7 +66,6 @@ void task_init(int id, task_entry_t entry)
     new_state->eflags = 0x202;            /* Enable Interrupts on iret */
 
     // Setup task_t object of task
-    tasks[id].stack = &task_stacks[id][0];
     tasks[id].state = new_state;
 }
 
@@ -87,8 +83,9 @@ cpu_state_t * task_sched(cpu_state_t * new_state)
     return tasks[next_task_idx].state;
 }
 
-void init_tasks(void)
+
+void task_init(void)
 {
-    task_init(0, &task_a_fn);
-    task_init(1, &task_b_fn);
+    task_init_task(0, &task_a_fn);
+    task_init_task(1, &task_b_fn);
 }

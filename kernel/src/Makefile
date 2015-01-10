@@ -6,7 +6,7 @@
 
 include ../../config.mk
 
-CFLAGS=-std=gnu99 --sysroot $(SYS_ROOT) -isystem $(SYS_ROOT)/usr/include/ -ffreestanding -O2 -Wall -Wextra -Wpadded
+CFLAGS=-std=c99 -DARCH=$(ARCH) --sysroot $(SYS_ROOT) -isystem $(SYS_ROOT)/usr/include/ -ffreestanding -O2 -Wall -Wextra -Wpadded
 LDFLAGS=-ffreestanding -O2 
 
 ../obj/%.c.o: %.c

@@ -91,7 +91,7 @@ void panic(uint8_t irq)
     if (exc)
 	klog_info("%s\n", irq);
 
-    asm volatile("cli; hlt");
+    __asm__ __volatile__("cli; hlt");
 }
 
 

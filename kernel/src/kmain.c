@@ -11,6 +11,7 @@
 #include <kernel/multiboot.h>
 #include <kernel/timer.h>
 #include <kernel/klog.h>
+#include <kernel/task.h>
 
 
 void timer_test(void)
@@ -32,8 +33,8 @@ void kmain(mboot_info_t * mbinfo)
     klog_info("Multiboot Version:\t%x\n", mbinfo->flags);
     klog_info("Memory (Low/High):\t%d/%d\n", mbinfo->mem_lo, mbinfo->mem_hi);
 
-    init_tasks();
-
-    //    timer_register_handler(100, &timer_test);
+    task_init();
     arch_start();
+    
+    task_idle();
 }

@@ -27,5 +27,5 @@ void arch_init(void)
 /* Called after platform-independent kernel initialization */
 void arch_start(void)
 {
-    asm volatile("sti");
+    __asm__ __volatile__("sti");
 }
