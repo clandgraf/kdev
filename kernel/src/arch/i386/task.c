@@ -9,8 +9,11 @@
 #include <kernel/arch/i386/cpu_state.h>
 #include <kernel/arch/i386/task.h>
 #include <kernel/klog.h>
+#include <kernel/ds/list.h>
 #include <stdint.h>
 
+#define TASK_GRP_IDLE   0
+#define TASK_GRP_NORMAL 1
 
 #define TASK_STACK_SIZE 4096
 
@@ -18,18 +21,20 @@ typedef void (*task_entry_t)(void);
 
 typedef struct task_struct {
     cpu_state_t * state;
-    
+
+    LIST_T
 } task_t;
 
-uint8_t task_stacks[2][TASK_STACK_SIZE];
-task_t tasks[2];
-int next_task_idx = -1;
-
+task_t * current_task = 0;
+task_t task_idle;
 
 // Tasks
 
 #include <stdio.h>
 #include <kernel/timer.h>
+
+uint8_t task_stacks[2][TASK_STACK_SIZE];
+task_t tasks[2];
 
 void task_a_fn(void)
 {
@@ -73,14 +78,13 @@ cpu_state_t * task_sched(cpu_state_t * new_state)
 {
     // Update cpu_state of current task
     // except if it is kmain
-    if (next_task_idx >= 0)
-	tasks[next_task_idx].state = new_state;
+    current_task->state = new_state;
 
     // Update task index
-    next_task_idx = (next_task_idx + 1) % 2;
+    current_task = list_entry_next(current_task);
     
     // And return cpu_state of next task
-    return tasks[next_task_idx].state;
+    return current_task->state;
 }
 
 
@@ -88,4 +92,15 @@ void task_init(void)
 {
     task_init_task(0, &task_a_fn);
     task_init_task(1, &task_b_fn);
+
+    // Make list circular
+    list_node(task_idle).next = &list_node(task_idle);
+    list_node(task_idle).prev = &list_node(task_idle);
+    current_task = &task_idle;
+
+    // Insert Task A and B
+    list_insert(&list_node(*current_task),
+                &list_node(tasks[1]));
+    list_insert(&list_node(*current_task),
+                &list_node(tasks[0]));
 }

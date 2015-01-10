@@ -36,5 +36,5 @@ void kmain(mboot_info_t * mbinfo)
     task_init();
     arch_start();
     
-    task_idle();
+    task_idle_fn();
 }

@@ -10,7 +10,7 @@
 #define KERNEL_MACROS_H_INCLUDED
 
 #define _STRINGIFY(a) #a
-#define STRINGIFY(a) _stringify(a)
+#define STRINGIFY(a) _STRINGIFY(a)
 #define CONCAT3(a, b, c) a/b/c
 
 /* Include an architecture dependent header */

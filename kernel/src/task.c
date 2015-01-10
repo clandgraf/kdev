@@ -7,9 +7,12 @@
  */
 
 #include <kernel/task.h>
+#include <kernel/klog.h>
 
-void task_idle(void)
+void task_idle_fn(void)
 {
-    while(1)
+    while(1) {
+        printf("Idle\n");
         task_break();
+    }
 }

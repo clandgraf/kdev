@@ -10,16 +10,14 @@
 
 void list_insert(list_node_t * list, list_node_t * node)
 {
-    node->next = list;
-    node->prev = list->prev;
-    list->prev = node;
+    node->next = list->next;
+    node->prev = list;
+    list->next->prev = node;
+    list->next = node;
 }
 
 void list_remove(list_node_t * node)
 {
-    if (node->next)
-	node->next->prev = node->prev;
-
-    if (node->prev)
-	node->prev->next = node->next;
+    node->next->prev = node->prev;
+    node->prev->next = node->next;
 }

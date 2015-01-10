@@ -12,7 +12,7 @@
 #include <kernel/macros.h>
 #include arch_header(task.h)
 
-void task_idle(void);
+void task_idle_fn(void);
 void task_init(void); /* Defined in arch/i386/task.c */
 
 #endif
