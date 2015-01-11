@@ -1,6 +1,6 @@
 	/*
 	 *
-	 * File:    kernel/src/arch/i386/gdt_flush.s
+	 * File:    kernel/src/arch/x86/gdt_flush.s
 	 * Author:  Christoph Landgraf
 	 * Purpose: Defines gdt_flush (declared in gdt.c)
 	 *          Sets up a GDT as initialized by gdt_init

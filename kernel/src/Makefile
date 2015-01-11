@@ -6,7 +6,7 @@
 
 include ../../config.mk
 
-CFLAGS=-std=c99 -DARCH=$(ARCH) --sysroot $(SYS_ROOT) -isystem $(SYS_ROOT)/usr/include/ -ffreestanding -O2 -Wall -Wextra -Wpadded
+CFLAGS=-std=gnu99 -DARCH=$(ARCH) --sysroot $(SYS_ROOT) -isystem $(SYS_ROOT)/usr/include/ -ffreestanding -O2 -Wall -Wextra -Wpadded
 LDFLAGS=-ffreestanding -O2 
 
 ../obj/%.c.o: %.c
@@ -31,7 +31,7 @@ all:	$(BINARY)
 
 $(BINARY):	$(OBJECTS) $(SYS_ROOT)/usr/lib/libk.a
 	@mkdir -p $(SYS_ROOT)/boot
-	$(CC) -T arch/i386/linker.ld -o $@ $(CFLAGS) $(OBJECTS) -nostdlib -lk -lgcc
+	$(CC) -T arch/$(ARCH)/linker.ld -o $@ $(CFLAGS) $(OBJECTS) -nostdlib -lk -lgcc
 
 clean:
 	rm -rf ../obj $(BINARY)

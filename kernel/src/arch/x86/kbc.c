@@ -1,6 +1,6 @@
 
-#include <kernel/arch/i386/io.h>
-#include <kernel/arch/i386/irq.h>
+#include <kernel/arch/x86/io.h>
+#include <kernel/arch/x86/irq.h>
 #include <kernel/klog.h>
 
 #define KBC_STATUS        0x64

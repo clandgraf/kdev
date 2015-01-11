@@ -1,5 +1,5 @@
 /*
- * File:    fb.h
+ * File:    text_mode.h
  * Author:  Christoph Landgraf
  * Purpose: Definitions for VGA Text Mode
  *
@@ -9,8 +9,8 @@
  *
  */
 
-#ifndef KERNEL_ARCH_I386_VGA_TEXT_MODE_H_INCLUDED
-#define KERNEL_ARCH_I386_VGA_TEXT_MODE_H_INCLUDED
+#ifndef KERNEL_ARCH_X86_VGA_TEXT_MODE_H_INCLUDED
+#define KERNEL_ARCH_X86_VGA_TEXT_MODE_H_INCLUDED
 
 #include <stdint.h>
 

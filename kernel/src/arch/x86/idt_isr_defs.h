@@ -1,13 +1,13 @@
 /*
  *
- * File:    kernel/src/arch/i386/idt_isr_defs.h
+ * File:    kernel/src/arch/x86/idt_isr_defs.h
  * Author:  Christoph Landgraf
  * Purpose: extern definitions for interrupt handlers
  *
  */ 
 
-#ifndef KERNEL_ARCH_I386_IDT_ISR_DEFS_H_INCLUDED
-#define KERNEL_ARCH_I386_IDT_ISR_DEFS_H_INCLUDED
+#ifndef KERNEL_ARCH_X86_IDT_ISR_DEFS_H_INCLUDED
+#define KERNEL_ARCH_X86_IDT_ISR_DEFS_H_INCLUDED
 
 /* 00-31: Hardware Faults */
 extern void isr0(void);  extern void isr1(void);  extern void isr2(void);  extern void isr3(void);

@@ -1,14 +1,14 @@
 /*
  *
- * File:    kernel/src/arch/i386/timer.c
+ * File:    kernel/src/arch/x86/timer.c
  * Author:  Christoph Landgraf
  * Purpose: Architecture specific timer driver
  *          Initialization of PIT and IRQ handler for PIT Interrupt
  *
  */
 
-#include <kernel/arch/i386/io.h>
-#include <kernel/arch/i386/irq.h>
+#include <kernel/arch/x86/io.h>
+#include <kernel/arch/x86/irq.h>
 #include <kernel/timer.h>
 
 /* Registers */

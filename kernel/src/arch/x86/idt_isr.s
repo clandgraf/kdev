@@ -1,6 +1,6 @@
 	/*
 	 *
-	 * File:    kernel/src/arch/i386/idt_isr.s
+	 * File:    kernel/src/arch/x86/idt_isr.s
 	 * Author:  Christoph Landgraf
 	 * Purpose: Interrupt Service Routines: Defines
 	 *          Assembler Level Interrupt Handlers

@@ -1,13 +1,13 @@
 /*
  *
- * File:    kernel/include/arch/i386/irq.h
+ * File:    kernel/include/arch/x86/irq.h
  * Author:  Christoph Landgraf
  * Purpose: Management of Interrupt handlers
  *
  */ 
 
-#ifndef KERNEL_ARCH_I386_IRQ_H_INCLUDED
-#define KERNEL_ARCH_I386_IRQ_H_INCLUDED
+#ifndef KERNEL_ARCH_X86_IRQ_H_INCLUDED
+#define KERNEL_ARCH_X86_IRQ_H_INCLUDED
 
 #include <stdint.h>
 

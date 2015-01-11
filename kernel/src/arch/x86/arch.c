@@ -1,19 +1,19 @@
 /*
  *
- * File:    kernel/src/arch/i386/arch.c
+ * File:    kernel/src/arch/x86/arch.c
  * Author:  Christoph Landgraf
  * Purpose: Architecture initialization implementation 
  *          for the i386 architecture.
  *
  */
 
-#include <kernel/arch/i386/io.h>
+#include <kernel/arch/x86/io.h>
 #include <kernel/config.h>
 
-extern void gdt_init(void);            /* kernel/src/arch/i386/gdt.c */
-extern void idt_init(void);            /* kernel/src/arch/i386/idt.c */
-extern void timer_init(uint32_t freq); /* kernel/src/arch/i386/timer.c */
-extern void kbc_init(void);            /* kernel/src/arch/i386/kbc.c */
+extern void gdt_init(void);            /* kernel/src/arch/x86/gdt.c */
+extern void idt_init(void);            /* kernel/src/arch/x86/idt.c */
+extern void timer_init(uint32_t freq); /* kernel/src/arch/x86/timer.c */
+extern void kbc_init(void);            /* kernel/src/arch/x86/kbc.c */
 
 /* Called before platform-independent kernel initialization */
 void arch_init(void)
@@ -27,5 +27,5 @@ void arch_init(void)
 /* Called after platform-independent kernel initialization */
 void arch_start(void)
 {
-    __asm__ __volatile__("sti");
+    asm volatile("sti");
 }

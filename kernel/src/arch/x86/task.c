@@ -1,13 +1,13 @@
 /*
  * 
- * File:    kernel/src/arch/i386/task.c
+ * File:    kernel/src/arch/x86/task.c
  * Author:  Christoph Landgraf
  * Purpose: Tasks and Scheduling for x86 platform
  * 
  */
 
-#include <kernel/arch/i386/cpu_state.h>
-#include <kernel/arch/i386/task.h>
+#include <kernel/arch/x86/cpu_state.h>
+#include <kernel/arch/x86/task.h>
 #include <kernel/klog.h>
 #include <kernel/ds/list.h>
 #include <stdint.h>

@@ -1,14 +1,14 @@
 /*
- * File:    kernel/src/arch/i386
+ * File:    kernel/src/arch/x86/idt.c
  * Author:  Christoph Landgraf
  * Purpose: Definitions for setting up the IDT.
  */
 
 #include <stdint.h>
 #include <stdlib.h>
-#include <kernel/arch/i386/io.h>
-#include <kernel/arch/i386/irq.h>
-#include <kernel/arch/i386/cpu_state.h>
+#include <kernel/arch/x86/io.h>
+#include <kernel/arch/x86/irq.h>
+#include <kernel/arch/x86/cpu_state.h>
 #include <kernel/klog.h>
 
 /* IDT Parameters */
@@ -91,7 +91,7 @@ void panic(uint8_t irq)
     if (exc)
 	klog_info("%s\n", irq);
 
-    __asm__ __volatile__("cli; hlt");
+    asm volatile("cli; hlt");
 }
 
 

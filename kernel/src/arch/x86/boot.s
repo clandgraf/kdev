@@ -1,6 +1,6 @@
 	/*
 	 *
-	 * File:    kernel/src/arch/i386/boot.s
+	 * File:    kernel/src/arch/x86/boot.s
 	 * Author:  Christoph Landgraf
 	 * Purpose: Bootstrapping Code for i386 processors using a multiboot bootloader
 	 *          (see http://www.gnu.org/software/grub/manual/multiboot/multiboot.html#Specification)
@@ -27,9 +27,6 @@ stack_bottom:
 	.skip 16384
 stack_top:
 
-	/* extern void gdt_install(void): from kernel/src/arch/i386/gdt.c */
-	.global gdt_init
-	
 	/* Entry Point of the kernel */
 	.section .text
 	.global _start

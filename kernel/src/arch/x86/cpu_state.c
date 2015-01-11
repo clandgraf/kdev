@@ -1,12 +1,12 @@
 /*
  *
- * File:    kernel/src/arch/i386/cpu_state.c
+ * File:    kernel/src/arch/x86/cpu_state.c
  * Author:  Christoph Landgraf
  * Purpose: Dumping the cpu_state_t to klog
  *
  */ 
 
-#include <kernel/arch/i386/cpu_state.h>
+#include <kernel/arch/x86/cpu_state.h>
 #include <kernel/klog.h>
 
 void klog_cpu_state(cpu_state_t * cpu_state)

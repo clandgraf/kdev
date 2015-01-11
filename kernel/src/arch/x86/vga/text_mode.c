@@ -1,6 +1,6 @@
 /*
  *
- * File:    kernel/src/fb.c
+ * File:    kernel/src/arch/x86/vga/text_mode.c
  * Author:  Christoph Landgraf
  * Purpose: VGA text mode driver
  *
@@ -10,8 +10,8 @@
 #include <stdint.h>
 #include <string.h>
 
-#include <kernel/arch/i386/vga/text_mode.h>
-#include <kernel/arch/i386/io.h>
+#include <kernel/arch/x86/vga/text_mode.h>
+#include <kernel/arch/x86/io.h>
 
 static const size_t VGA_CRTC_CTRL = 0x3d4;
 static const size_t VGA_CRTC_DATA = 0x3d5;

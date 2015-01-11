@@ -1,5 +1,5 @@
 /*
- * File:    kernel/src/arch/i386/gdt.c
+ * File:    kernel/src/arch/x86/gdt.c
  * Author:  Christoph Landgraf
  * Purpose: This file contains definitions and functions for 
  *          setting up the Global Descriptor Table.
@@ -47,7 +47,7 @@ struct gdt_ptr {
 struct gdt_entry gdt[5];
 struct gdt_ptr   gdtp;
 
-/* defined in kernel/src/arch/i386/boot.s */
+/* defined in kernel/src/arch/x86/gdt_flush.s */
 extern void gdt_flush(void);
 
 void gdt_set_gate(int idx, uint32_t base, uint32_t limit, uint8_t access, uint8_t flags)
@@ -62,7 +62,7 @@ void gdt_set_gate(int idx, uint32_t base, uint32_t limit, uint8_t access, uint8_
     gdt[idx].access  = access;               /* Access */
 }
 
-/* called in kernel/src/arch/i386/boot.s */
+/* called in kernel/src/arch/x86/arch.c */
 void gdt_init(void)
 {
     gdtp.lmt = sizeof(struct gdt_entry) * 3 - 1;

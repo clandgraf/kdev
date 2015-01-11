@@ -1,13 +1,13 @@
 /*
  *
- * File:    kernel/src/arch/i386/io.h
+ * File:    kernel/src/arch/x86/io.h
  * Author:  Christoph Landgraf
  * Purpose: Provides functions for reading and writing to IA32 i/o-ports.
  *
  */
 
-#ifndef KERNEL_ARCH_I386_IO_H_INCLUDED
-#define KERNEL_ARCH_I386_IO_H_INCLUDED
+#ifndef KERNEL_ARCH_X86_IO_H_INCLUDED
+#define KERNEL_ARCH_X86_IO_H_INCLUDED
 
 #include <stdint.h>
 

@@ -13,7 +13,7 @@ SUFFIXES=.c .h .s. .iso .bin .o
 ###
 
 # Setup Toolchain and directories
-export ARCH=i386
+export ARCH=x86
 
 export AS=i686-elf-as
 export CC=i686-elf-gcc
@@ -35,10 +35,8 @@ export SYS_ROOT=$(DEV_ROOT)$(SYS_ROOT_NAME)
 # detect sed
 ifeq ($(shell echo a | sed s/a\?/b/g), a)
 export SED=sed -E
-$(info BSD sed detected: using $(SED))
 else
 export SED=sed
-$(info GNU sed detected: using $(SED))
 endif
 
 
