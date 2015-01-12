@@ -10,6 +10,7 @@
 #include <kernel/arch/x86/irq.h>
 #include <kernel/arch/x86/cpu_state.h>
 #include <kernel/klog.h>
+#include <kernel/panic.h>
 
 /* IDT Parameters */
 #define IDT_TYPE_INT_16  0x6
@@ -83,15 +84,15 @@ struct idt_ptr   idtp;
 extern void idt_flush(void);
 
 
-void panic(uint8_t irq)
+void fault_panic(uint8_t irq)
 {
-    klog_info("Kernel Panic: Fault 0x%x\n", irq);
+    klog_info("Unhandled Hardware Fault! IRQ 0x%x\n", irq);
 
     const char * exc = exception_strings[irq];
     if (exc)
 	klog_info("%s\n", irq);
 
-    asm volatile("cli; hlt");
+    panic();
 }
 
 
@@ -150,8 +151,8 @@ void idt_init(void)
     idt_flush();
 
     /* Install Handler for Hardware Faults */
-    irq_register_handler(EXC_DIV_BY_ZERO,  &panic);
-    irq_register_handler(EXC_DOUBLE_FAULT, &panic);
+    irq_register_handler(EXC_DIV_BY_ZERO,  &fault_panic);
+    irq_register_handler(EXC_DOUBLE_FAULT, &fault_panic);
 }
 
 
