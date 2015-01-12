@@ -7,6 +7,13 @@
 
 SUFFIXES=.c .h .s. .iso .bin .o
 
+###
+###  Version
+###
+
+export BUILD_VERSION_BRANCH=$(shell git rev-parse --abbrev-ref HEAD)
+export BUILD_VERSION_DATE=$(shell date)
+export BUILD_VERSION_REV=$(shell git rev-list HEAD --count)
 
 ###
 ###  Configuration

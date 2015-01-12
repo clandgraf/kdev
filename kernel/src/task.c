@@ -12,7 +12,7 @@
 void task_idle_fn(void)
 {
     while(1) {
-        printf("Idle\n");
+        //printf("Idle\n");
         task_break();
     }
 }

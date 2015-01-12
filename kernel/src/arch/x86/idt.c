@@ -204,8 +204,8 @@ cpu_state_t * isr_dispatch(cpu_state_t * cpu_state)
 	handler(cpu_state->intr);
 
     /* Switch task */
-    if (cpu_state->intr == IRQ_PIT)
-	return task_sched(cpu_state);
+    //if (cpu_state->intr == IRQ_PIT)
+    //return task_sched(cpu_state);
 
     return cpu_state;
 }

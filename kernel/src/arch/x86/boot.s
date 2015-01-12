@@ -33,11 +33,12 @@ stack_top:
 	.type _start, @function
 _start:
 	movl $stack_top, %esp     /* Initialize Stack... */
-	push %ebx                 /* ... multiboot info addr is in %ebx, this is passed to kmain ... */
+	pushl %ebx                /* ... multiboot info addr is in %ebx, this is passed to kmain ... */
+        pushl %eax                /* ... multiboot magic ... */
 	call kmain                /* ... call main ... */
 	add  $4, %ebx             /* and clear the stack */
 
-	//cli
+	cli                       /* never reached */
 	hlt
 .Lhang:
 	jmp .Lhang

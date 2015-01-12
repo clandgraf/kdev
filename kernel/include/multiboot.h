@@ -11,6 +11,9 @@
 
 #include <stdint.h>
 
+#define MBOOT_HEADER_MAGIC     0x1BADB002
+#define MBOOT_BOOTLOADER_MAGIC 0x2BADB002
+
 struct mboot_info {
     uint32_t flags;
     
@@ -47,5 +50,18 @@ struct mboot_info {
 };
 
 typedef struct mboot_info mboot_info_t;
+
+struct mboot_mmap_entry {
+    uint32_t size;
+    uint64_t addr;
+    uint64_t len;
+#define MULTIBOOT_MEMORY_AVAILABLE              1
+#define MULTIBOOT_MEMORY_RESERVED               2
+    uint32_t type;
+    
+} __attribute__((packed));
+
+typedef struct mboot_mmap_entry mboot_mmap_t;
+     
 
 #endif

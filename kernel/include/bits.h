@@ -9,6 +9,7 @@
 #ifndef KERNEL_BITS_H_INCLUDED
 #define KERNEL_BITS_H_INCLUDED
 
-#define IS_BIT_SET(b, v) (v & (1 << b))
+#define BITS_MASK(b)      (1 << b)
+#define BITS_IS_SET(b, v) (v & BITS_MASK(b))
 
 #endif

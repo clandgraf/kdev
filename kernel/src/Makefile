@@ -6,7 +6,7 @@
 
 include ../../config.mk
 
-CFLAGS=-std=gnu99 -DARCH=$(ARCH) --sysroot $(SYS_ROOT) -isystem $(SYS_ROOT)/usr/include/ -ffreestanding -O2 -Wall -Wextra -Wpadded
+CFLAGS=-std=gnu99 -DBUILD_VERSION_DATE="\"$(BUILD_VERSION_DATE)\"" -DBUILD_VERSION_REV=\"r$(BUILD_VERSION_REV)\" -DBUILD_VERSION_BRANCH=\"$(BUILD_VERSION_BRANCH)\" -DARCH=$(ARCH) --sysroot $(SYS_ROOT) -isystem $(SYS_ROOT)/usr/include/ -ffreestanding -O2 -Wall -Wextra -Wpadded
 LDFLAGS=-ffreestanding -O2 
 
 ../obj/%.c.o: %.c
@@ -29,7 +29,7 @@ BINARY=$(SYS_ROOT)/boot/kdev.bin
 
 all:	$(BINARY)
 
-$(BINARY):	$(OBJECTS) $(SYS_ROOT)/usr/lib/libk.a
+$(BINARY):	$(OBJECTS) $(SYS_ROOT)/usr/lib/libk.a arch/$(ARCH)/linker.ld
 	@mkdir -p $(SYS_ROOT)/boot
 	$(CC) -T arch/$(ARCH)/linker.ld -o $@ $(CFLAGS) $(OBJECTS) -nostdlib -lk -lgcc
 
