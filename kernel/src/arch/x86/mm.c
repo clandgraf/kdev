@@ -65,20 +65,40 @@ uint32_t mm_alloc_frame(void)
     return 0;
 }
 
+const char * mm_type_strings[] = {
+    "undefined",
+    "available",
+    "reserved",
+    "acpi",
+    "nvs",
+    "badram"
+};
 
-void mm_init(mboot_info_t * mbinfo)
+void mm_init(multiboot_info_t * mbinfo)
 {
-  // Clear all frames
-  for (uint32_t i = 0; i < FRAME_MAP_SIZE; i++)
-    frame_map[i] = 0;
+    klog_info("Initializing memory management\n");
+    
+    // First we init all frames used
+    for (uint32_t i = 0; i < FRAME_MAP_SIZE; i++)
+        frame_map[i] = 0xffffffff;
+    
+    // Use the mboot mmap to clear free frames
+    multiboot_memory_map_t * mmap;
+    for (mmap = (multiboot_memory_map_t *) mbinfo->mmap_addr;
+         (uint32_t) mmap < mbinfo->mmap_addr + mbinfo->mmap_length;
+         mmap = (multiboot_memory_map_t *) ((uint32_t) mmap + mmap->size + sizeof(mmap->size))) {
 
-  
-  uint32_t addr;
-  
-  // TODO Set memory map used
-
-  // Set kernel memory used
-  addr = KERNEL_START;
-  for (addr = KERNEL_START; addr < KERNEL_END; addr += 0x1000)
-      mm_frame_set(addr / 0x1000);
+        klog_info (" base = %08x %08x,"
+                   " len = %08x %08x: %s\n",
+                   (uint32_t) (mmap->addr >> 32),
+                   (uint32_t) (mmap->addr & 0xffffffff),
+                   (uint32_t) (mmap->len >> 32),
+                   (uint32_t) (mmap->len & 0xffffffff),
+                   mm_type_strings[mmap->type]);
+    }
+    
+    // Now we set the kernel frames used again
+    uint32_t addr = KERNEL_START;
+    for (addr = KERNEL_START; addr < KERNEL_END; addr += 0x1000)
+        mm_frame_set(addr / 0x1000);
 }

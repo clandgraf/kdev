@@ -11,6 +11,6 @@
 
 #include <kernel/multiboot.h>
 
-void mm_init(mboot_info_t * mbinfo);
+void mm_init(multiboot_info_t * mbinfo);
 
 #endif
