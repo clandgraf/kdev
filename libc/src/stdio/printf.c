@@ -9,6 +9,9 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <stdarg.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <string.h>
 
 static const char digit_to_char[] = {
     '0', '1', '2', '3', '4', '5', '6', '7', 
@@ -25,56 +28,76 @@ static size_t print_string(const char * str)
     return len;
 }
 
-static size_t print_signed_r(signed int i, unsigned int base)
+static char * itoa(signed int value, char * buffer, uint8_t base)
 {
-    if (i == 0)
-	return 0;
+    char tmp[64];
 
-    //TODO this might be problematic due to how % treats negative numbers
-    unsigned int cnt = print_signed_r(i / base, base) + 1;
-    putchar(digit_to_char[i % base]);
-    return cnt;
-}
+    char * b1 = &tmp[0]; 
+    char * b2 = buffer;
 
-static size_t print_signed(signed int i, unsigned int base)
-{
-    if (i == 0) {
-	putchar('0');
-	return 1;
-    }
+    bool sign = (value < 0 && base == 10);
+    if (sign)
+        value = -value;
 
-    return print_signed_r(i , base);
-}
+    do {
+        *(b1++) = digit_to_char[value % base];
+        value /= base;
+    } while (value > 0);
 
-static size_t print_unsigned_r(unsigned int i, unsigned int base)
-{
-    if (i == 0)
-	return 0;
+    if (sign)
+        *(b1++) = '-';
     
-    unsigned int cnt = print_unsigned_r(i / base, base) + 1;
-    putchar(digit_to_char[i % base]);
-    return cnt;
+    while ((*(b2++) = *(--b1)))
+        ;
+
+    return buffer;
 }
 
-static size_t print_unsigned(unsigned int i, unsigned int base)
+static char * utoa(uint32_t value, char * buffer, uint8_t base)
 {
-    if (i == 0) {
-	putchar('0');
-	return 1;
-    }
+    char tmp[64];
+
+    char * b1 = &tmp[0]; 
+    char * b2 = buffer;
+
+    // Write to tmp
+    *b1 = '\0';
+    b1++;
     
-    return print_unsigned_r(i, base);
+    do {
+        *(b1++) = digit_to_char[value % base];
+        value /= base;
+    } while (value > 0);
+
+    while ((*(b2++) = *(--b1)))
+        ;
+
+    return buffer;
+}
+
+static void pad(signed int pad_width, bool pad_zero)
+{
+    char p = pad_zero ? '0' : ' ';
+    while (pad_width-- > 0)
+        putchar(p);
 }
 
 int printf(const char * fmt, ...)
 {
     va_list varargs;
     va_start(varargs, fmt);
+
+    static char buffer[64];
+    static uint32_t uint;
+    static signed int sint;
     
     int cnt = 0;
     while (*fmt) {
+        bool pad_zero = false;
+        uint32_t padding = 0;
+
+        // Output character and continue with next
 	if (*fmt != '%') {
-	    // Output character and continue with next
 	    putchar(*fmt);
 	    cnt++; fmt++;
 	    continue;
@@ -82,32 +105,69 @@ int printf(const char * fmt, ...)
 	
 	fmt++;
 	
-	// Get conversion string, convert and output vararg
-	// TODO support flags, field width, precision and length
-	switch (*fmt++) {
+	// Read conversion string, convert and output vararg
+next:	switch (*fmt) {
 	case '%':
 	    putchar('%');
 	    cnt++;
 	    break;
-	case 's':
-	    cnt += print_string(va_arg(varargs, const char *));
-	    break;
+
+        // Zero Pad Flag and Width
+        case '0':
+            if (padding == 0) {
+                pad_zero = true;
+                fmt++;
+                goto next;
+            }
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':
+        case '6':
+        case '7':
+        case '8':
+        case '9':
+            padding = padding * 10 + ((*fmt) - '0');
+            fmt++;
+            goto next;
+
 	case 'd':
 	case 'i':
-	    cnt += print_signed(va_arg(varargs, signed int), 10);
+            sint = va_arg(varargs, signed int);
+            itoa(sint, &buffer[0], 10);
+            // TODO apply padding
+	    cnt += print_string(&buffer[0]);
 	    break;
 	case 'o':
-	    cnt += print_unsigned(va_arg(varargs, unsigned int), 8);
+            uint = va_arg(varargs, uint32_t);
+            utoa(uint, &buffer[0], 8);
+            pad(padding - strlen(&buffer[0]), pad_zero);
+            cnt += print_string(&buffer[0]);
 	    break;
 	case 'u':
-	    cnt += print_unsigned(va_arg(varargs, unsigned int), 10);
+            uint = va_arg(varargs, uint32_t);
+            utoa(uint, &buffer[0], 10);
+            pad(padding - strlen(&buffer[0]), pad_zero);
+	    cnt += print_string(&buffer[0]);
 	    break;
 	case 'x':
 	case 'X':
-	    cnt += print_unsigned(va_arg(varargs, unsigned int), 16);
+            uint = va_arg(varargs, uint32_t);
+            utoa(uint, &buffer[0], 16);
+            pad(padding - strlen(&buffer[0]), pad_zero);
+	    cnt += print_string(&buffer[0]);
 	    break;
-	}
+
+	case 's':
+	    cnt += print_string(va_arg(varargs, const char *));
+	    break;
+        }
+
+        fmt++;
     }
+    
+    va_end(varargs);
     
     return cnt;
 }
