@@ -32,8 +32,8 @@ struct page_dir_entry_struct {
 
 typedef struct page_dir_entry_struct page_dir_entry_t;
 
-page_dir_entry_t page_directory[1024];
-
+page_dir_entry_t * page_directory;
+page_dir_entry_t pd_space[1024];
 
 // We address 4GB memory at a page size of 4KiB: 1M Pages.
 // Our bitmap must be 1M / 32 = 32k words
@@ -78,10 +78,10 @@ uint32_t mm_alloc_frame(void)
         if (frame_map[idx] == 0xffffffff)
             continue;
 
-		for (uint32_t off = 0; off < 32; off++)
+        for (uint32_t off = 0; off < 32; off++)
             if (!mm_frame_is_used_(idx, off)) {
                 mm_frame_set_(idx, off);
-                return idx * 32 + off;
+                return (idx * 32 + off) * 0x1000;
             }
     }
 
@@ -100,6 +100,17 @@ const char * mm_type_strings[] = {
     "nvs",
     "badram"
 };
+
+extern void mm_enable_paging(void);
+extern void mm_load_pagedir(page_dir_entry_t * page_dir);
+
+void mm_map_page(uint32_t addr)
+{
+    uint32_t page_idx = addr / 4096;
+
+    uint32_t page_dir_idx = addr / 1024;
+    uint32_t page_tbl_idx = addr / 1024;
+}
 
 void mm_init(multiboot_info_t * mbinfo)
 {
@@ -123,18 +134,32 @@ void mm_init(multiboot_info_t * mbinfo)
                    (uint32_t) (mmap->len & 0xffffffff),
                    mm_type_strings[mmap->type]);
 
-	    // Clear all frames in mmap entry
-		if (mmap->type == MULTIBOOT_MEMORY_AVAILABLE)
-		    for (uint32_t addr = (mmap->mmap->addr & 0xffffffff); 
-			     addr < (mmap->mmap->addr & 0xffffffff) + (mmap->len & 0xffffffff); 
-				 addr += 0x1000) {
-				 
-				 mm_frame_clr(addr / 0x1000);
-		    }
+        // Clear all frames in mmap entry
+        if (mmap->type == MULTIBOOT_MEMORY_AVAILABLE)
+            for (uint32_t addr = (mmap->addr & 0xffffffff); 
+                 addr < (mmap->addr & 0xffffffff) + (mmap->len & 0xffffffff); 
+                 addr += 0x1000) {
+		
+                mm_frame_clr(addr / 0x1000);
+            }
     }
     
     // Now we set the kernel frames used again
     uint32_t addr = KERNEL_START;
     for (addr = KERNEL_START; addr < KERNEL_END; addr += 0x1000)
         mm_frame_set(addr / 0x1000);
+
+    // Allocate page_directory for kernel task and map kernel space
+    page_directory = (page_dir_entry_t *) mm_alloc_frame();
+    for (int i = 0; i < 1024; i++)
+        ((uint32_t *) page_directory)[i] = 0;
+
+    klog_info("Kernel Page Directory: 0x%04x %04x\n",
+              ((uint32_t) page_directory) >> 16,
+              ((uint32_t) page_directory) & 0xffff);
+
+    // Map the kernel into memory
+    
+    //mm_load_pagedir(page_directory);
+    //mm_enable_paging();
 }
