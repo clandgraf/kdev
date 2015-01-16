@@ -25,9 +25,9 @@
 
 struct page_dir_entry_struct {
     unsigned int flags        : 9;
-	unsigned int flags_free   : 2;
-	unsigned int page_tbl_ptr : 21;
-
+    unsigned int flags_free   : 3;
+    unsigned int page_tbl_ptr : 20;
+    
 } __attribute__ ((__packed__));
 
 typedef struct page_dir_entry_struct page_dir_entry_t;
@@ -104,18 +104,45 @@ const char * mm_type_strings[] = {
 extern void mm_enable_paging(void);
 extern void mm_load_pagedir(page_dir_entry_t * page_dir);
 
-void mm_map_page(uint32_t addr)
+void mm_map_page_paging_disabled(uint32_t vaddr, uint32_t paddr)
 {
-    uint32_t page_idx = addr / 4096;
+    uint32_t page_idx = vaddr / 4096;
 
-    uint32_t page_dir_idx = addr / 1024;
-    uint32_t page_tbl_idx = addr / 1024;
+    uint32_t page_dir_idx = page_idx / 1024;
+    uint32_t page_tbl_idx = page_idx % 1024;
+
+    uint32_t frame_ptr;
+
+    // Allocate Frame for page table and map it
+    if (!(page_directory[page_dir_idx].flags & PAGING_FLAG_MAPPED)) {
+        frame_ptr = mm_alloc_frame();
+
+        ((uint32_t *)page_directory)[page_dir_idx] =
+            (frame_ptr & 0xfffff000) | PAGING_FLAG_MAPPED | PAGING_FLAG_WRITEABLE;
+    }
+    // or simply retrieve it
+    else frame_ptr = ((uint32_t *)page_directory)[page_dir_idx] & 0xfffff000;     
+
+    // Create entry in page_table
+    ((uint32_t *)frame_ptr)[page_tbl_idx] =
+        (paddr & 0xfffff000) | PAGING_FLAG_MAPPED | PAGING_FLAG_WRITEABLE;
+
+    asm volatile("invlpg %0" : : "m" (*(char*)vaddr));
 }
 
-void mm_init(multiboot_info_t * mbinfo)
+page_dir_entry_t * mm_create_context(void)
 {
-    klog_info("Initializing memory management\n");
+    page_dir_entry_t * pd = (page_dir_entry_t *) mm_alloc_frame();
+    for (int i = 0; i < 1024; i++)
+        ((uint32_t *) pd)[i] = 0;
+
+    // TODO create self reference
     
+    return pd;
+}
+
+void mm_init_mmap(multiboot_info_t * mbinfo)
+{
     // First we init all frames used
     for (uint32_t i = 0; i < FRAME_MAP_SIZE; i++)
         frame_map[i] = 0xffffffff;
@@ -148,18 +175,31 @@ void mm_init(multiboot_info_t * mbinfo)
     uint32_t addr = KERNEL_START;
     for (addr = KERNEL_START; addr < KERNEL_END; addr += 0x1000)
         mm_frame_set(addr / 0x1000);
+}
 
-    // Allocate page_directory for kernel task and map kernel space
-    page_directory = (page_dir_entry_t *) mm_alloc_frame();
-    for (int i = 0; i < 1024; i++)
-        ((uint32_t *) page_directory)[i] = 0;
+void mm_init(multiboot_info_t * mbinfo)
+{
+    klog_info("Initializing memory management\n");
+
+    mm_init_mmap(mbinfo);
+    page_directory = mm_create_context();
 
     klog_info("Kernel Page Directory: 0x%04x %04x\n",
               ((uint32_t) page_directory) >> 16,
               ((uint32_t) page_directory) & 0xffff);
 
-    // Map the kernel into memory
-    
-    //mm_load_pagedir(page_directory);
-    //mm_enable_paging();
+    // Map the kernel
+    for (uint32_t addr = KERNEL_START; addr < KERNEL_END; addr += 0x1000)
+        mm_map_page_paging_disabled(addr, addr);
+
+    // Map video memory
+    for (uint32_t addr = 0xb8000; addr < 0xbffff; addr += 0x1000)
+        mm_map_page_paging_disabled(addr, addr);
+
+    // Map multiboot structure
+    mm_map_page_paging_disabled((uint32_t) mbinfo, (uint32_t) mbinfo);
+
+    // Load kernel pagedir and enable paging
+    mm_load_pagedir(page_directory);
+    mm_enable_paging();
 }
