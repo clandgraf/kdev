@@ -6,7 +6,7 @@
 
 include config.mk
 
-.PHONY:	all run disc-image kernel libs clean install-headers
+.PHONY:	all run disc-image kernel libs clean install-headers doc
 
 all:	$(SYS_ROOT)/boot/kdev.bin
 
@@ -28,9 +28,13 @@ install-headers:
 libs:	
 	cd libc && $(MAKE)
 
+doc:	
+	cd doc/kernel && make -f ../../doc.mk
+
 clean:
 	cd kernel && $(MAKE) clean
 	cd libc && $(MAKE) clean
+	cd doc/kernel && make -f ../../doc.mk clean
 	rm -rf $(SYS_ROOT)
 	rm -f kdev.iso
 	find . -name "*~" -exec rm {} \;
