@@ -39,9 +39,9 @@ void kmain(uint32_t magic, multiboot_info_t * mbinfo)
 {
     con_init();
 
-    klog_info("Kernel Location:   %x, %x\n", KERNEL_START, KERNEL_END);
+    klog_info("Kernel Location:   0x%08x - 0x%08x\n", KERNEL_START, KERNEL_END);
     klog_info("Multiboot Version: %x\n", mbinfo->flags);
-    klog_info("Memory (Low/High): %d/%d\n", mbinfo->mem_lower, mbinfo->mem_upper);
+    klog_info("Memory (Low/High): 0x%08x/0x%08x\n", mbinfo->mem_lower, mbinfo->mem_upper);
     check_multiboot(magic, mbinfo);
 
     arch_init();
