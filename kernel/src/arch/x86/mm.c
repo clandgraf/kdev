@@ -23,17 +23,17 @@
 #define PAGING_FLAG_NO_CACHE  0x10
 #define PAGING_FLAG_DIRTY     0x20
 
-struct page_dir_entry_struct {
-    unsigned int flags        : 9;
-    unsigned int flags_free   : 3;
-    unsigned int page_tbl_ptr : 20;
-    
-} __attribute__ ((__packed__));
+typedef union page_dir_entry_struct {
+    struct {
+        unsigned int flags        : 9;
+        unsigned int flags_free   : 3;
+        unsigned int page_tbl_ptr : 20;
+    } __attribute__ ((__packed__));
 
-typedef struct page_dir_entry_struct page_dir_entry_t;
+    uint32_t v;
+} page_dir_entry_t;
 
 page_dir_entry_t * page_directory;
-page_dir_entry_t pd_space[1024];
 
 // We address 4GB memory at a page size of 4KiB: 1M Pages.
 // Our bitmap must be 1M / 32 = 32k words
@@ -117,11 +117,11 @@ void mm_map_page_paging_disabled(uint32_t vaddr, uint32_t paddr)
     if (!(page_directory[page_dir_idx].flags & PAGING_FLAG_MAPPED)) {
         frame_ptr = mm_alloc_frame();
 
-        ((uint32_t *)page_directory)[page_dir_idx] =
+        page_directory[page_dir_idx].v =
             (frame_ptr & 0xfffff000) | PAGING_FLAG_MAPPED | PAGING_FLAG_WRITEABLE;
     }
     // or simply retrieve it
-    else frame_ptr = ((uint32_t *)page_directory)[page_dir_idx] & 0xfffff000;     
+    else frame_ptr = page_directory[page_dir_idx].v & 0xfffff000;     
 
     // Create entry in page_table
     ((uint32_t *)frame_ptr)[page_tbl_idx] =
@@ -136,7 +136,11 @@ page_dir_entry_t * mm_create_context(void)
     for (int i = 0; i < 1024; i++)
         ((uint32_t *) pd)[i] = 0;
 
-    // TODO create self reference
+    // create self reference
+    // FIXME: is it ok to use the last 4 mb?
+    // multiboot says its reserved. otherwise its vspace we take?
+    pd[0x3ff].v =
+        ((uint32_t) pd & 0xfffff000) | PAGING_FLAG_MAPPED | PAGING_FLAG_WRITEABLE;
     
     return pd;
 }
@@ -197,9 +201,14 @@ void mm_init(multiboot_info_t * mbinfo)
         mm_map_page_paging_disabled(addr, addr);
 
     // Map multiboot structure
-    mm_map_page_paging_disabled((uint32_t) mbinfo, (uint32_t) mbinfo);
+    //mm_map_page_paging_disabled((uint32_t) mbinfo, (uint32_t) mbinfo);
 
+    //klog_info("page_dir(paddr): 0x%08x\n", page_directory[0x3ff].v);
+    
     // Load kernel pagedir and enable paging
     mm_load_pagedir(page_directory);
     mm_enable_paging();
+
+    // Check if we can access the directory from virtual address
+    //klog_info("page_dir(vaddr): 0x%08x\n", ((page_dir_entry_t *)0xfffff000)[0x3ff].v);
 }

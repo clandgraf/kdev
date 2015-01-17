@@ -37,17 +37,21 @@ extern "C"
 #endif
 void kmain(uint32_t magic, multiboot_info_t * mbinfo)
 {
-    arch_init();
     con_init();
-
-    check_multiboot(magic, mbinfo);
-
-    mm_init(mbinfo);
 
     klog_info("Kernel Location:   %x, %x\n", KERNEL_START, KERNEL_END);
     klog_info("Multiboot Version: %x\n", mbinfo->flags);
     klog_info("Memory (Low/High): %d/%d\n", mbinfo->mem_lower, mbinfo->mem_upper);
-    klog_info("Version: %s-%s %s\n", BUILD_VERSION_BRANCH, BUILD_VERSION_REV, BUILD_VERSION_DATE);
+    check_multiboot(magic, mbinfo);
+
+    arch_init();
+    mm_init(mbinfo);
+
+    klog_info("Sepix %s-%s %s %s\n",
+              BUILD_VERSION_BRANCH,
+              BUILD_VERSION_REV,
+              BUILD_VERSION_DATE,
+              STRINGIFY(ARCH));
 
     task_init();
     arch_start();
