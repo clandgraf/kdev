@@ -7,7 +7,7 @@ include ../../config.mk
 
 html/%.html:	src/%.rst
 	@mkdir -p $(dir $@)
-	rst2html $< $@
+	$(RST2HTML) $< $@
 
 RST_FILES=$(addprefix html/, $(call file_list, src, , '*.rst'))
 

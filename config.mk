@@ -29,6 +29,7 @@ export CPP=i686-elf-cpp
 
 export SYS_ROOT_NAME=img
 
+export RST2HTML=rst2html.py
 
 # Setup Directory Structure
 export DEV_ROOT=$(dir $(lastword $(MAKEFILE_LIST)))
