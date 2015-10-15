@@ -5,7 +5,7 @@
 <p>The current implementation includes a multiboot compatible startup routine, as well as the basic setup of the x86 architecture.</p>
 
 
-<h2>Toolchain Configuration</2>
+<h2>Toolchain Configuration</h2>
 
 <p>The code has been tested on qemu-i386 using the following toolchain configuration:</p>
 

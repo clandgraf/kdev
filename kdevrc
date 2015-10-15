@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CROSS_PREFIX=/cygdrive/c/src/gh/kdev_tools
+CROSS_PREFIX=/home/cla/src/kdev_tools
 PATH="$CROSS_PREFIX/bin:$PATH"
 
 echo "Prefix: ${CROSS_PREFIX}"

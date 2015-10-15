@@ -16,7 +16,7 @@ run:	kdev.iso
 kdev.iso:	$(SYS_ROOT)/boot/kdev.bin
 	mkdir -p $(SYS_ROOT)/boot/grub
 	cp grub.cfg $(SYS_ROOT)/boot/grub
-	grub-mkrescue -o $@ img
+	grub2-mkrescue -o $@ img
 
 $(SYS_ROOT)/boot/kdev.bin:	install-headers libs
 	cd kernel/src && $(MAKE)
